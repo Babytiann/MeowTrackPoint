@@ -1,4 +1,3 @@
-import './App.css'
 import {Route, Routes} from "react-router";
 
 import Page from './components/testPage/Main.tsx';
