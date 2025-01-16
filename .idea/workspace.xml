@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de2358a2-3748-4d4f-a9c4-763e7c5275d8" name="更改" comment="chore: add axios">
-      <change afterPath="$PROJECT_DIR$/frontend/src/SDK/StatisticSDK.ts" afterDir="false" />
+    <list default="true" id="de2358a2-3748-4d4f-a9c4-763e7c5275d8" name="更改" comment="feat: init SDK">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/SDK/StatisticSDK.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/SDK/StatisticSDK.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +96,7 @@
       <workItem from="1736919931155" duration="54000" />
       <workItem from="1736920000383" duration="11562000" />
       <workItem from="1736940388572" duration="8266000" />
-      <workItem from="1736994176502" duration="15463000" />
+      <workItem from="1736994176502" duration="18961000" />
     </task>
     <task id="LOCAL-00001" summary="chore: add depedences">
       <option name="closed" value="true" />
@@ -121,7 +122,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737014385361</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="feat: init SDK">
+      <option name="closed" value="true" />
+      <created>1737014588285</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1737014588285</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -143,6 +152,7 @@
     <MESSAGE value="feat: add router &amp;&amp; testPage" />
     <MESSAGE value="feat: add router &amp;&amp; testPag" />
     <MESSAGE value="chore: add axios" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: add axios" />
+    <MESSAGE value="feat: init SDK" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: init SDK" />
   </component>
 </project>
