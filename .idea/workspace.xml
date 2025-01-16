@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de2358a2-3748-4d4f-a9c4-763e7c5275d8" name="更改" comment="feat: init SDK">
+    <list default="true" id="de2358a2-3748-4d4f-a9c4-763e7c5275d8" name="更改" comment="refactor: use axios &amp;&amp; extend usage scope">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/SDK/StatisticSDK.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/SDK/StatisticSDK.ts" afterDir="false" />
     </list>
@@ -96,7 +96,7 @@
       <workItem from="1736919931155" duration="54000" />
       <workItem from="1736920000383" duration="11562000" />
       <workItem from="1736940388572" duration="8266000" />
-      <workItem from="1736994176502" duration="18961000" />
+      <workItem from="1736994176502" duration="23707000" />
     </task>
     <task id="LOCAL-00001" summary="chore: add depedences">
       <option name="closed" value="true" />
@@ -130,7 +130,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737014588285</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="refactor: use axios &amp;&amp; extend usage scope">
+      <option name="closed" value="true" />
+      <created>1737018535449</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1737018535449</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,6 +161,7 @@
     <MESSAGE value="feat: add router &amp;&amp; testPag" />
     <MESSAGE value="chore: add axios" />
     <MESSAGE value="feat: init SDK" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: init SDK" />
+    <MESSAGE value="refactor: use axios &amp;&amp; extend usage scope" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: use axios &amp;&amp; extend usage scope" />
   </component>
 </project>
