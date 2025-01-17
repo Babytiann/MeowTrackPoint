@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors'
 
+import baseInfo from "./API/baseInfo";
 import demo from "./API/demo";
 import timing from "./API/timing";
 import error from './API/error'
@@ -38,6 +39,7 @@ app.use(express.urlencoded({ extended: true }));  // 解析 URL-encoded 请求�
 
 
 //Router引入
+app.use('/baseInfo', baseInfo);
 app.use('/demo', demo);
 app.use("/timing", timing);
 app.use('/error', error);
