@@ -1,28 +1,38 @@
 import express from 'express';
-import book from './router/test'
+import book from './router/error'
 import cors from 'cors'
 
+//后端初始化路由
 const app = express();
+const port = 5927
+
+//CORS跨域, some是遍历数组的一种方法
+const corsOptions= {
+    origin: function (origin: string | undefined, callback: (err: Error | null, allow: boolean) => void) {
+        const allowedOrigins = [
+            'http://localhost:5173',
+            'https://localhost:5173',
+            /^https:\/\/([a-zA-Z0-9-]*\.)?gemdzqq\.com$/,
+        ];
+
+        if (origin && allowedOrigins.some(pattern => pattern instanceof RegExp ? pattern.test(origin) : pattern === origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'), false);
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type'],
+};
+
+app.use(cors(corsOptions)); //返回如果是
+
+//Router引入
 app.use('/book', book)
 
-const port = 5927
-// 中间件 1：打印请求日志
-app.use((req, res, next) => {
-    console.log(`Request made to: ${req.url}`);
-    next();  // 调用下一个中间件
-});
-
-// 中间件 2：添加自定义头部
-app.use((req, res, next) => {
-    res.header("X-Custom-Header", "CustomValue");
-    console.log(`Next middle`);
-    next();  // 调用下一个中间件
-});
-
-app.use(cors()); //返回如果是
-
+//后端直接配置路由
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.send('Welcome to Meow Backend !✨');
 });
 
 app.get('/baby', (req, res) => {
