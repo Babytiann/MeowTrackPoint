@@ -50,12 +50,9 @@ class StatisticSDK{
         this.send(eventURL,{event: key, ...val});
     }
 
-    pv(){
-        this.event("pv")
-    }  //返回页面访问次数，请求发送一次说明产生一次访问
-
-    UV(){
-        this.event("uv", {uuid: this.uuid})
+    //PV和UV一起监控，放在一张表格中
+    PUV(){
+        this.event("puv", {uuid: this.uuid})
     }
 
     //性能监控
