@@ -21,7 +21,7 @@ async function initDatabase() {
             'event varchar(10),' +
             'event_data text,' +
             'page_url varchar(225),' +
-            'create_at datetime)');
+            'create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
 
         console.log("Table 'demo' is ready.");
     }catch (error){
@@ -48,8 +48,8 @@ async function insertData(data: unknown) {
     }; //因为data的类型是unknown，所以需要断言一下
 
     try{
-        const sql = 'insert into demo (uuid, event, event_data, page_url, create_at) values(?, ?, ?, ?, ?)';
-        const val = [uuid, event, event_data, page_url, new Date()];
+        const sql = 'insert into demo (uuid, event, event_data, page_url) values(?, ?, ?, ?)';
+        const val = [uuid, event, event_data, page_url];
 
         const [result, fields] = await conn.execute(sql, val);
 
