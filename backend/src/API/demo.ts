@@ -2,10 +2,11 @@ import express, { Request, Response } from "express";
 import mysql from 'mysql2/promise'
 import dotenv from 'dotenv';
 
-
 dotenv.config({ path: '.env.development.local' }); //加载环境变量默认是.env，但是我们这里是.env.development.local，所以要加上path
+
 // 初始化数据库连接
 async function initDatabase() {
+
     const conn = await mysql.createConnection({
         host: 'localhost',
         user: process.env.DB_USER,
@@ -14,7 +15,6 @@ async function initDatabase() {
     });
 
     try{
-        // 只在应用启动时创建一次表
         await conn.query('create table if not exists demo (' +
             'id int primary key auto_increment,' +
             'uuid varchar(255),' +
@@ -60,7 +60,6 @@ async function insertData(data: unknown) {
     }finally {
         await conn.end();
     }
-
 }
 
 initDatabase().catch(error => console.error(error));
@@ -73,10 +72,9 @@ router
     })
     .post("/", async (req: Request, res: Response) => {
         try{
-            // 获取请求体内容
             const data = req.body;
             await insertData(data);
-            res.status(201).json({message: "data send successfully"});
+            res.status(201).json({message: "Data send to demo successfully"});
         } catch (error){
             console.error("Data send unsuccessfully", error);
             res.status(500).json({ message: "Error inserting data" });
