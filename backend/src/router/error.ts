@@ -4,7 +4,7 @@ const router = express.Router();
 
 router
     .get("/", (req: Request, res: Response) => {
-        res.send("Get a random book");
+        res.json("Get a random book");
     })
     .post("/", (req: Request, res: Response) => {
         res.send("Add a book");
