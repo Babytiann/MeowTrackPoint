@@ -7,9 +7,10 @@ declare type query ={
     message?: string;
     stack?: string;
     type?: string;
+    page_url?: string;
 }
 /*路由： /timing 接收时间
-
+        /error  接收错误信息
         /demo  接收用户行为数据
 */
 class StatisticSDK{
@@ -23,7 +24,8 @@ class StatisticSDK{
     };
 
     send(Url: string, query:query = {}){
-        query.uuid = this.uuid;                             //添加事件名称
+        query.uuid = this.uuid;                   //添加事件名称
+        query.page_url = window.location.href;      // 获取当前页面 URL
 
         axios({
             method: 'post',
@@ -45,7 +47,7 @@ class StatisticSDK{
     //事件监控
     event(key: string, val = {}){
         const eventURL = '/demo';
-        this.send(eventURL,{event:key, ...val});
+        this.send(eventURL,{event: key, ...val});
     }
 
     pv(){
@@ -83,7 +85,7 @@ class StatisticSDK{
             this.error(event.error);
         })
         window.addEventListener('unhandledrejection', event=>{
-            this.error(new Error(event.reason), { type: 'unhandledrejection'})
+            this.error(new Error(event.reason), { type: 'unhandledrejection'})  //query中添加type属性
         })
     }
 
