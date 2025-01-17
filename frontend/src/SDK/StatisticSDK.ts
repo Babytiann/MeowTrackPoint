@@ -19,8 +19,9 @@ class StatisticSDK{
 
     constructor(UUID: string) {
         this.uuid = UUID;
-        this.initPerformance()
-        this.initError()
+        this.initPerformance();
+        this.initError();
+        this.PUV();
     };
 
     send(Url: string, query:query = {}){
