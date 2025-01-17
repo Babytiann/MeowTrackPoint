@@ -1,10 +1,9 @@
 import express from 'express';
-import bodyParser from "body-parser";
 import cors from 'cors'
 
-import demo from "./router/demo";
-import timing from "./router/timing";
-import error from './router/error'
+import demo from "./API/demo";
+import timing from "./API/timing";
+import error from './API/error'
 
 //后端初始化路由
 const app = express();
@@ -31,11 +30,11 @@ const corsOptions= {
     allowedHeaders: ['Content-Type'],
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions));// 使用 CORS 中间件
 
 // 全局使用 body-parser 中间件来解析请求体
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());  // 解析 JSON 请求体
+app.use(express.urlencoded({ extended: true }));  // 解析 URL-encoded 请求体
 
 
 //Router引入

@@ -8,11 +8,12 @@ function Page() {
         {id: 4, text: "总的来说，无论是前端还是后端开发，高效的流程和工具选型都是成功的关键因素。开发团队在实践中应根据具体需求和技术背景，灵活调整开发策略，不断优化工作流程，以适应快速发展的技术环境。"},
     ]
     const res = list.map(person => <li key= {person.id}>{person.text}</li>)
-    fetch('http://localhost:5927/book')
-        .then(response => response.json())
-        .then(res => console.log("Get a random book", res))
-    return (
 
+    fetch('http://localhost:5927/demo')
+        .then(response => response.json())
+        .then(res => console.log("Successfully", res))
+
+    return (
         <div className={"my-0 mx-auto w-[400px] leading-loose"}>
             <Error></Error>
             <h1 className={"font-bold text-center"}>Test Page</h1>

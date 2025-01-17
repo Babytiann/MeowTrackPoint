@@ -1,0 +1,86 @@
+import express, { Request, Response } from "express";
+import mysql from 'mysql2/promise'
+import dotenv from 'dotenv';
+
+
+dotenv.config({ path: '.env.development.local' }); //加载环境变量默认是.env，但是我们这里是.env.development.local，所以要加上path
+// 初始化数据库连接
+async function initDatabase() {
+    const conn = await mysql.createConnection({
+        host: 'localhost',
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+    });
+
+    try{
+        // 只在应用启动时创建一次表
+        await conn.query('create table if not exists demo (' +
+            'id int primary key auto_increment,' +
+            'uuid varchar(255),' +
+            'event varchar(10),' +
+            'event_data text,' +
+            'page_url varchar(225),' +
+            'create_at datetime)');
+
+        console.log("Table 'demo' is ready.");
+    }catch (error){
+        console.error("create or connect table error",error);
+    } finally{
+        await conn.end();  // 关闭连接
+    }
+}
+
+// 使用 async 函数创建数据库连接
+async function insertData(data: unknown) {
+    const conn = await mysql.createConnection({
+        host: 'localhost',
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+    });
+
+    const { uuid, event, event_data, page_url } = data as {
+        uuid?: string,
+        event?: string,
+        event_data?: string,
+        page_url?: string
+    }; //因为data的类型是unknown，所以需要断言一下
+
+    try{
+        const sql = 'insert into demo (uuid, event, event_data, page_url, create_at) values(?, ?, ?, ?, ?)';
+        const val = [uuid, event, event_data, page_url, new Date()];
+
+        const [result, fields] = await conn.execute(sql, val);
+
+        console.log(result);
+        console.log(fields);
+    } catch (error){
+        console.error("Error inserting data:", error);
+    }finally {
+        await conn.end();
+    }
+
+}
+
+initDatabase().catch(error => console.error(error));
+
+const router = express.Router();
+
+router
+    .get("/", (_, res: Response) => {
+        res.json("This is the demo API")
+    })
+    .post("/", async (req: Request, res: Response) => {
+        try{
+            // 获取请求体内容
+            const data = req.body;
+            await insertData(data);
+            res.status(201).json({message: "data send successfully"});
+        } catch (error){
+            console.error("Data send unsuccessfully", error);
+            res.status(500).json({ message: "Error inserting data" });
+        }
+    });
+
+export default router;
