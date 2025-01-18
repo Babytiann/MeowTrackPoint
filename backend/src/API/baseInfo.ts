@@ -62,7 +62,7 @@ async function insertData(data: unknown) {
     }
 }
 
-initDatabase().catch(error => console.error(error));
+initDatabase().catch(error => console.error(error));  //这个顶级调用会在导入的时候调用
 
 const router = express.Router();
 
