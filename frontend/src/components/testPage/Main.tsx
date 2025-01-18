@@ -1,6 +1,18 @@
 import Error from "../Panel/Error/Error.tsx";
+import { v4 as uuidv4 } from 'uuid';
+import {useState} from "react";
 
 function Page() {
+    const [uuid, setUuid] = useState(uuidv4())
+
+    function createUUID(){
+        setUuid(uuidv4())
+    }
+
+    fetch('http://localhost:5927/demo')
+        .then(response => response.json())
+        .then(res => console.log("Successfully", res))
+
     const list = [
         {id: 1, text: "总的来说，无论是前端还是后端开发，高效的流程和工具选型都是成功的关键因素。开发团队在实践中应根据具体需求和技术背景，灵活调整开发策略，不断优化工作流程，以适应快速发展的技术环境。"},
         {id: 2, text: "总的来说，无论是前端还是后端开发，高效的流程和工具选型都是成功的关键因素。开发团队在实践中应根据具体需求和技术背景，灵活调整开发策略，不断优化工作流程，以适应快速发展的技术环境。"},
@@ -8,10 +20,6 @@ function Page() {
         {id: 4, text: "总的来说，无论是前端还是后端开发，高效的流程和工具选型都是成功的关键因素。开发团队在实践中应根据具体需求和技术背景，灵活调整开发策略，不断优化工作流程，以适应快速发展的技术环境。"},
     ]
     const res = list.map(person => <li key= {person.id}>{person.text}</li>)
-
-    fetch('http://localhost:5927/demo')
-        .then(response => response.json())
-        .then(res => console.log("Successfully", res))
 
     return (
         <div className={"my-0 mx-auto w-[400px] leading-loose"}>
@@ -56,6 +64,8 @@ function Page() {
                     <ul>{res}</ul>
                 </section>
             </article>
+            <button onClick={createUUID} className="mt-4 p-2 bg-blue-500 text-white">生成 UUID</button>
+            <p>当前 UUID: {uuid}</p>
         </div>
     )
 }
