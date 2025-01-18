@@ -1,17 +1,35 @@
 import Error from "../Panel/Error/Error.tsx";
-import { v4 as uuidv4 } from 'uuid';
-import {useState} from "react";
+import { createUuid, getUUID} from "../../services/cookies.ts";
+import {useState, useEffect} from "react";
+
+// 在 Page 组件外部执行创建 UUID，以确保页面加载时执行一次
+function checkAndCreateUUID() {
+    const existingUuid = getUUID();
+    if (!existingUuid) {
+        createUuid(); // 创建并设置 cookie
+    }
+}
 
 function Page() {
-    const [uuid, setUuid] = useState(uuidv4())
 
-    function createUUID(){
-        setUuid(uuidv4())
-    }
+    const [uuid, setUuid] = useState<string | null>(getUUID);
+    console.log(uuid);
 
-    fetch('http://localhost:5927/demo')
-        .then(response => response.json())
-        .then(res => console.log("Successfully", res))
+
+    useEffect(() => {
+        // 检查并创建 UUID
+        checkAndCreateUUID();
+
+        // 如果页面加载后有 UUID cookie, 会被加载到 state 中
+        const currentUuid = getUUID();
+        if (currentUuid) {
+            setUuid(currentUuid);
+        }
+
+        fetch('http://localhost:5927/demo')
+            .then(response => response.json())
+            .then(res => console.log("Successfully", res));
+    }, []);
 
     const list = [
         {id: 1, text: "总的来说，无论是前端还是后端开发，高效的流程和工具选型都是成功的关键因素。开发团队在实践中应根据具体需求和技术背景，灵活调整开发策略，不断优化工作流程，以适应快速发展的技术环境。"},
@@ -21,11 +39,16 @@ function Page() {
     ]
     const res = list.map(person => <li key= {person.id}>{person.text}</li>)
 
+    const css = "absolute w-[1200px] bottom-1/2 left-1/2 text-center -translate-x-1/2 translate-y-1/2"
     return (
-        <div className={"my-0 mx-auto w-[400px] leading-loose"}>
+        <>
             <Error></Error>
-            <h1 className={"font-bold text-center"}>Test Page</h1>
-            <article className={"text-start"}>
+            <div className={"relative h-16"}>
+                <p className={css}>当前 UUID: {uuid}</p>
+            </div>
+             <div className={"my-0 mx-auto w-[400px] leading-loose"}>
+                <h1 className={"font-bold text-center"}>Test Page</h1>
+                <article className={"text-start"}>
                 <header>
                     <h1>如何高效规划与优化前端与后端的开发流程</h1>
                 </header>
@@ -64,9 +87,8 @@ function Page() {
                     <ul>{res}</ul>
                 </section>
             </article>
-            <button onClick={createUUID} className="mt-4 p-2 bg-blue-500 text-white">生成 UUID</button>
-            <p>当前 UUID: {uuid}</p>
-        </div>
+             </div>
+        </>
     )
 }
 
