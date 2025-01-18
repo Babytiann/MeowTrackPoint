@@ -22,7 +22,8 @@ async function initDatabase() {
             'navigationStart BIGINT, ' +
             'domLoading BIGINT, ' +
             'domLoadDone BIGINT, ' +
-            'Loadend BIGINT)');
+            'Loadend BIGINT' +
+            'create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
 
         console.log("Table 'timing' is ready.");
     } catch (error) {

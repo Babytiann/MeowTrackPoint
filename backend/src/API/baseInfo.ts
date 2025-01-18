@@ -20,7 +20,8 @@ async function initDatabase() {
             'uuid varchar(255),' +
             'browser varchar(20),' +
             'os varchar(20),' +
-            'referrer varchar(255))'); //referrer是来源网址，前端通过document.referrer 获取
+            'referrer varchar(255)' +
+            'create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)'); //referrer是来源网址，前端通过document.referrer 获取
 
         console.log("Table 'baseInfo' is ready.");
     }catch (error){
