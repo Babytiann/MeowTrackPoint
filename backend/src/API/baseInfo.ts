@@ -74,7 +74,7 @@ router
         try{
             const data = req.body;
             await insertData(data);
-            res.status(201).json({message: "Data send to baseInfo successfully"});
+            res.status(200).json({message: "Data send to baseInfo successfully"});
         }catch (error){
             console.error("Data send unsuccessfully", error);
             res.status(500).json({ message: "Error inserting data" });
