@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"pnpm --filter frontend run dev\" \"pnpm --filter backend run dev\"",
     "start:frontend": "pnpm --filter frontend run dev",
-    "start:backend": "pnpm --filter backend run dev"
+    "start:backend": "pnpm --filter backend run dev",
+    "build": "concurrently \"pnpm --filter frontend run build\" \"pnpm --filter backend run build\""
   },
   "keywords": [],
   "author": "Meow",
