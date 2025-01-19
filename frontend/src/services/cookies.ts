@@ -9,7 +9,7 @@ export function createUuid( days: number = 7) {   //默认七天之后过期
     const expires = "expires=" + date.toUTCString(); // 格式化过期时间，e.g.Mon, 18 Feb 2025 12:00:00 GMT
 
     console.log("Cookie expiration time: ",date.toUTCString())
-    document.cookie = `uuid=${encodeURIComponent(uuid)}; ${expires}; path=/`;
+    document.cookie = `uuid=${encodeURIComponent(uuid)}; ${expires}; path=/`; // 设置 cookie
 }
 
 export function getUUID(){
