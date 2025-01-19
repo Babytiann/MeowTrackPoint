@@ -7,7 +7,7 @@ dotenv.config({ path: '.env.development.local' });
 // 使用 async 函数创建数据库连接
 async function initDatabase() {
     const conn = await mysql.createConnection({
-        host: 'localhost',
+        host: process.env.DB_HOST,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
@@ -38,7 +38,7 @@ async function initDatabase() {
 // 使用 async 函数插入数据
 async function insertData(data: unknown) {
     const conn = await mysql.createConnection({
-        host: 'localhost',
+        host: process.env.DB_HOST,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
