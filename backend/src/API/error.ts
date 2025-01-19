@@ -80,7 +80,7 @@ router
         try {
             const data = req.body;
             await insertData(data);
-            res.status(201).json({ message: "Error data logged successfully" });
+            res.status(200).json({ message: "Error data logged successfully" });
         } catch (error) {
             console.error("Data insertion failed", error);
             res.status(500).json({ message: "Error inserting data" });

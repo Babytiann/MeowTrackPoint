@@ -84,7 +84,7 @@ router
         try {
             const data = req.body;
             await insertData(data);
-            res.status(201).json({ message: "Data sent to timing successfully" });
+            res.status(200).json({ message: "Data sent to timing successfully" });
         } catch (error) {
             console.error("Data insertion failed", error);
             res.status(500).json({ message: "Error inserting data" });
