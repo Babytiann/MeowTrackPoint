@@ -53,12 +53,16 @@ async function insertData(data: unknown) {
 
         const [result, fields] = await conn.execute(sql, val);
 
-        console.log(result);
-        console.log(fields);
+        console.log(result);   //返回语句执行结果,通常会有affectedRows等
+        console.log(fields);   //因为是插入语句所以为空也就是undefined
     } catch (error){
         console.error("Error inserting data:", error);
     }finally {
-        await conn.end();
+        try {
+            await conn.end();  // 确保数据库连接正常关闭
+        } catch (closeError) {
+            console.error("Error closing connection:", closeError);
+        }
     }
 }
 

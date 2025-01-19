@@ -27,7 +27,11 @@ async function initDatabase() {
     }catch (error){
         console.error("create or connect table error",error);
     } finally{
-        await conn.end();  // 关闭连接
+        try {
+            await conn.end();  // 确保数据库连接正常关闭
+        } catch (closeError) {
+            console.error("Error closing connection:", closeError);
+        }
     }
 }
 
