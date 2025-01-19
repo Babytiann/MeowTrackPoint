@@ -52,7 +52,7 @@ app.get('/', (req, res) => {
 
 //监听端口
 const port = 5927
-app.listen(port, () => {
+export const server = app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
 

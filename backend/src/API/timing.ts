@@ -67,7 +67,11 @@ async function insertData(data: unknown) {
     } catch (error) {
         console.error("Error inserting data:", error);
     } finally {
-        await conn.end();
+        try {
+            await conn.end();  // 确保数据库连接正常关闭
+        } catch (closeError) {
+            console.error("Error closing connection:", closeError);
+        }
     }
 }
 
