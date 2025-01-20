@@ -6,6 +6,8 @@ import demo from "./API/demo";
 import timing from "./API/timing";
 import error from './API/error'
 
+import check from "./API/check";
+
 //后端初始化路由
 const app = express();
 
@@ -43,6 +45,7 @@ app.use('/baseInfo', baseInfo);
 app.use('/demo', demo);
 app.use("/timing", timing);
 app.use('/error', error);
+app.use('/check', check);
 
 //后端直接配置路由
 app.get('/', (req, res) => {

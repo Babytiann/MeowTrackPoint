@@ -1,6 +1,7 @@
 import Error from "../Panel/Error/Error.tsx";
 import { createUuid, getUUID} from "../../services/cookies.ts";
 import {useState, useEffect} from "react";
+import axios from "axios";
 
 // 在 Page 组件外部执行创建 UUID，以确保页面加载时执行一次
 function checkAndCreateUUID() {
@@ -29,6 +30,21 @@ function Page() {
         fetch('http://localhost:5927/demo')
             .then(response => response.json())
             .then(res => console.log("Successfully", res));
+
+        let data1;
+
+        axios({
+            url: "http://localhost:5927/check",
+            method: 'post',
+            data: {
+                table: "timing"
+            }
+        }).then(res => {
+            console.log("Successfully", res.data)
+            data1 = res.data;
+            console.log(data1[0])
+        });
+
     }, []);
 
     const list = [
