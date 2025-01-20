@@ -61,7 +61,7 @@ async function insertData(data: unknown) {
         console.log(result);
         console.log(fields);
     } catch (error) {
-        console.error("Error inserting data:", error);
+        console.error("Error inserting data in table 'error':", error);
     } finally {
         try {
             await conn.end();  // 确保数据库连接正常关闭
