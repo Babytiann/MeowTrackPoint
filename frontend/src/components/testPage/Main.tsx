@@ -1,4 +1,4 @@
-import Error from "../Panel/Error/Error.tsx";
+import Error from "../ErrorPage/Error.tsx";
 import { createUuid, getUUID} from "../../services/cookies.ts";
 import {useState, useEffect} from "react";
 import axios from "axios";
@@ -15,6 +15,15 @@ function Page() {
 
     const [uuid, setUuid] = useState<string | null>(getUUID);
     console.log(uuid);
+
+    const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+
+    if (navigationEntry) {
+        console.log(navigationEntry);  // 检查有哪些属性
+        console.log(window.location.href); //测试这个API是否可以获取当前页面
+    } else {
+        console.log('No navigation entry found.');
+    }
 
 
     useEffect(() => {
