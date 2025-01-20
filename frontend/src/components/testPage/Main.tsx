@@ -2,6 +2,7 @@ import Error from "../ErrorPage/Error.tsx";
 import { createUuid, getUUID} from "../../services/cookies.ts";
 import {useState, useEffect} from "react";
 import axios from "axios";
+//import statisticSDK from "../../SDK/StatisticSDK.ts";
 
 // 在 Page 组件外部执行创建 UUID，以确保页面加载时执行一次
 function checkAndCreateUUID() {
@@ -13,18 +14,9 @@ function checkAndCreateUUID() {
 
 function Page() {
 
-    const [uuid, setUuid] = useState<string | null>(getUUID);
+    const [uuid, setUuid] = useState<string | null>(getUUID());
     console.log(uuid);
-
-    const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-
-    if (navigationEntry) {
-        console.log(navigationEntry);  // 检查有哪些属性
-        console.log(window.location.href); //测试这个API是否可以获取当前页面
-    } else {
-        console.log('No navigation entry found.');
-    }
-
+    //const sdk = new statisticSDK(uuid);
 
     useEffect(() => {
         // 检查并创建 UUID
@@ -35,10 +27,6 @@ function Page() {
         if (currentUuid) {
             setUuid(currentUuid);
         }
-
-        fetch('http://localhost:5927/demo')
-            .then(response => response.json())
-            .then(res => console.log("Successfully", res));
 
         let data1;
 
@@ -54,7 +42,9 @@ function Page() {
             console.log(data1[0])
         });
 
-    }, []);
+        //sdk.send("/demo", {event: "sdkTest", event_data: null})
+
+    }, [/*sdk*/]);
 
     const list = [
         {id: 1, text: "总的来说，无论是前端还是后端开发，高效的流程和工具选型都是成功的关键因素。开发团队在实践中应根据具体需求和技术背景，灵活调整开发策略，不断优化工作流程，以适应快速发展的技术环境。"},
