@@ -19,10 +19,9 @@ async function initDatabase() {
             'uuid varchar(255), ' +
             'event varchar(10), ' +
             'pageUrl varchar(255), ' +
-            'navigationStart BIGINT, ' +
-            'domLoading BIGINT, ' +
-            'domLoadDone BIGINT, ' +
-            'Loadend BIGINT,' +
+            'FP BIGINT, ' +
+            'DCL BIGINT, ' +
+            'L BIGINT, ' +
             'create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
 
         console.log("Table 'timing' is ready.");
@@ -46,19 +45,26 @@ async function insertData(data: unknown) {
         database: process.env.DB_NAME,
     });
 
-    const { uuid, event, pageUrl, navigationStart, domLoading, domLoadDone, Loadend } = data as {
+    const { uuid, event, pageUrl, FP, DCL, L} = data as {
         uuid?: string;
         event?: string;
         pageUrl?: string;
-        navigationStart?: number;
-        domLoading?: number;
-        domLoadDone?: number;
-        Loadend?: number;
+        FP?: number;
+        DCL?: number;
+        L?: number;
     };
 
     try {
-        const sql = 'insert into timing (uuid, event, pageUrl, navigationStart, domLoading, domLoadDone, Loadend) values(?, ?, ?, ?, ?, ?, ?)';
-        const val = [uuid, event, pageUrl, navigationStart, domLoading, domLoadDone, Loadend];
+        // 调整后的 SQL 插入语句
+        const sql = 'INSERT INTO timing (uuid, event, pageUrl, FP, DCL, L) VALUES (?, ?, ?, ?, ?, ?)';
+        const val = [
+            uuid,
+            event,
+            pageUrl,
+            FP,
+            DCL,
+            L,
+        ];
 
         const [result, fields] = await conn.execute(sql, val);
 

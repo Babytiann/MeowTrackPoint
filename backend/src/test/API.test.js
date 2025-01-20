@@ -98,10 +98,9 @@ describe('POST /timing', () => {
             uuid: 'timing-test',
             event: 'testEvent',
             pageUrl: 'https://example.com',
-            navigationStart: 1000,
-            domLoading: 2000,
-            domLoadDone: 3000,
-            Loadend: 4000,
+            FP: 1000,
+            DCL: 2000,
+            L: 3000,
         };
 
         const response = await request(app)
