@@ -17,7 +17,7 @@ async function initDatabase() {
         await conn.query('create table if not exists timing (' +
             'id INT primary key auto_increment, ' +
             'uuid varchar(255), ' +
-            'event varchar(10), ' +
+            'event varchar(50), ' +
             'pageUrl varchar(255), ' +
             'FP BIGINT, ' +
             'DCL BIGINT, ' +
@@ -45,14 +45,15 @@ async function insertData(data: unknown) {
         database: process.env.DB_NAME,
     });
 
-    const { uuid, event, pageUrl, FP, DCL, L} = data as {
+    const { uuid, event, page_url, FP, DCL, L} = data as {
         uuid?: string;
         event?: string;
-        pageUrl?: string;
+        page_url?: string;
         FP?: number;
         DCL?: number;
         L?: number;
     };
+
 
     try {
         // 调整后的 SQL 插入语句
@@ -60,7 +61,7 @@ async function insertData(data: unknown) {
         const val = [
             uuid,
             event,
-            pageUrl,
+            page_url,
             FP,
             DCL,
             L,
@@ -71,7 +72,7 @@ async function insertData(data: unknown) {
         console.log(result);
         console.log(fields);
     } catch (error) {
-        console.error("Error inserting data:", error);
+        console.error("Error inserting data in table 'timing':", error);
     } finally {
         try {
             await conn.end();  // 确保数据库连接正常关闭
