@@ -1,8 +1,10 @@
 import  axios from "axios";
+import { UAParser } from 'ua-parser-js';
 
 declare type query ={
-    uuid?: string;
+    uuid?: string | null;
     event?: string;
+    event_data?: string | null;
     time?: PerformanceEntry[];
     message?: string;
     stack?: string;
@@ -11,19 +13,23 @@ declare type query ={
     FP?: number,
     DCL?: number,
     L?: number,
+    os?: string,
+    browser?: string,
+    referrer?: string,
 }
 /*路由： /timing 接收时间
         /error  接收错误信息
         /demo  接收用户行为数据
 */
 class StatisticSDK{
-    uuid: string;
+    uuid: string | null;
 
-    constructor(UUID: string) {
+    constructor(UUID: string|null) {
         this.uuid = UUID;
-        this.initPerformance();
         this.initError();
         this.PUV();
+        this.sendBaseInfo();
+        this.initPerformance();
     };
 
     send(Url: string, query:query = {}){
@@ -43,19 +49,13 @@ class StatisticSDK{
                 console.log("Send data successfully:",response.data);
             })
             .catch(err => {
-                console.error("请求出错啦！！！", err);
+                console.error("SDK中send函数请求出错啦！！！", err);
             })
     }
 
-    //事件监控
-    event(key: string, val = {}){
-        const eventURL = '/demo';
-        this.send(eventURL,{event: key, ...val});
-    }
-
-    //PV和UV一起监控，放在一张表格中
+    //事件监控，PV和UV一起监控，放在一张表格中
     PUV(){
-        this.event("puv", {uuid: this.uuid})
+        this.send('/demo',{event: "puv", event_data: null})
     }
 
     //性能监控
@@ -79,6 +79,7 @@ class StatisticSDK{
             timeParams.FP = fp;
             timeParams.DCL = dcl;
             timeParams.L = loadTime;
+            timeParams.event = "send Timing";
 
         } else {
             console.log('No navigation entry found.');
@@ -109,6 +110,20 @@ class StatisticSDK{
         window.addEventListener('unhandledrejection', event=>{
             this.error(new Error(event.reason), { type: 'unhandledrejection'})  //query中添加type属性
         })
+    }
+
+    sendBaseInfo() {
+        const userAgent = navigator.userAgent;
+        const parser = new UAParser(userAgent);
+
+        const os = parser.getOS().name; // 获取操作系统信息
+        const osVersion = parser.getOS().version; // 获取操作系统版本信息
+        const browser = parser.getBrowser().name; // 获取浏览器信息
+        const referrer = document.referrer;
+
+        const fullOS = os && osVersion ? `${os} ${osVersion}` : os;
+
+        this.send("/baseInfo", { os: fullOS,browser: browser, referrer: referrer })
     }
 
 }
