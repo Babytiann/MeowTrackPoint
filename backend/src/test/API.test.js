@@ -97,7 +97,7 @@ describe('POST /timing', () => {
         const data = {
             uuid: 'timing-test',
             event: 'testEvent',
-            pageUrl: 'https://example.com',
+            page_url: 'https://example.com',
             FP: 1000,
             DCL: 2000,
             L: 3000,

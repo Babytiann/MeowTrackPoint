@@ -18,7 +18,7 @@ async function initDatabase() {
             'id INT primary key auto_increment, ' +
             'uuid varchar(255), ' +
             'event varchar(50), ' +
-            'pageUrl varchar(255), ' +
+            'page_url varchar(255), ' +
             'FP BIGINT, ' +
             'DCL BIGINT, ' +
             'L BIGINT, ' +
@@ -57,7 +57,7 @@ async function insertData(data: unknown) {
 
     try {
         // 调整后的 SQL 插入语句
-        const sql = 'INSERT INTO timing (uuid, event, pageUrl, FP, DCL, L) VALUES (?, ?, ?, ?, ?, ?)';
+        const sql = 'INSERT INTO timing (uuid, event, page_url, FP, DCL, L) VALUES (?, ?, ?, ?, ?, ?)';
         const val = [
             uuid,
             event,
