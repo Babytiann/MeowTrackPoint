@@ -1,6 +1,9 @@
+@import "./style/font.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 *,
 *::before,
@@ -8,3 +11,11 @@
   box-sizing: border-box;
 }
 
+@layer utilities{
+  .en{
+    font-family: 'Comic Neue', sans-serif;
+  }
+  .cn{
+    font-family: 'fontslab-dongmanerciyuanRg', sans-serif;
+  }
+}
