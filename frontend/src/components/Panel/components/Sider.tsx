@@ -12,7 +12,7 @@ function Sider({ brightMode }: SiderProps) {
                 <div className="w-12 rounded-full overflow-hidden">
                     <img src ={avatar} alt="An avatar" className="object-contain"/>
                 </div>
-                <h1>Meow</h1>
+                <a href="https://gemdzqq.com" target="_blank">Meow</a>
             </div>
             <div className="pl-[20%]">
                 <div className="accent-gray-300 opacity-40">Menu</div>
