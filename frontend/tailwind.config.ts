@@ -7,7 +7,11 @@ export default {
   ],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        custYellow: "#F5FFEC",
+      }
+    },
   },
   plugins: [],
 } satisfies Config
