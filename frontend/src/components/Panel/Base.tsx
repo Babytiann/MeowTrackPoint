@@ -5,7 +5,7 @@ import Header from "./components/Header";
 
 
 const BaseArea = () =>{
-    const [brightMode, setBrightMode] = useState(true);
+    const [brightMode, setBrightMode] = useState(true);  // 亮暗模式
 
     // 切换 brightMode 的函数
     const toggleMode = () => {
@@ -13,14 +13,14 @@ const BaseArea = () =>{
     };
 
     return (
-        <div className="flex">
+        <div className={`${brightMode ? ' ' : 'dark'}`}>
+        <div className="flex  dark:bg-[#3B3B3A] dark:text-white">
             <Sider brightMode={brightMode} ></Sider>
             <div className="flex flex-col">
                 <Header></Header>
                 <Outlet/>
             </div>
-
-        </div>
+        </div></div>
     );
 };
 

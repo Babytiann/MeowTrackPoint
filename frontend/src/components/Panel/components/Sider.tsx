@@ -25,6 +25,9 @@ function Sider({ brightMode }: SiderProps) {
             <input type={"checkbox"} className="absolute cursor-pointer
                                                 opacity-0
 
+                                                hidden
+                                                sm:block
+
                                                 size-6
                                                 z-10
 
@@ -33,7 +36,7 @@ function Sider({ brightMode }: SiderProps) {
 
                                                 peer" onChange={handelClick}/>
 
-        <div className="flex flex-col w-[208px] lg:w-[308px] h-[100vh] relative duration-300 peer-checked:w-[208px] en">
+        <div className="flex flex-col w-[108px] lg:w-[308px] h-[100vh] relative duration-300 peer-checked:w-[108px] en">
             <div className="flex basis-[15%] justify-center items-center text-center py-[25px]">
 
                 {/* 头像*/}
@@ -51,6 +54,9 @@ function Sider({ brightMode }: SiderProps) {
                                 size-8 rounded-lg
 
                                 flex items-center justify-center
+
+                                invisible
+                                sm:visible
 
                                 cursor-pointer
                                 " ref={arrow}>
