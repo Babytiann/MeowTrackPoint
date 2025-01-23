@@ -44,6 +44,8 @@ function Sider({ brightMode }: SiderProps) {
                 <div className={`${navSmall ? 'hidden' : 'block'}`}>
                      <a href="https://gemdzqq.com" target="_blank" className="text-5xl font-bold hidden lg:block">Meow</a>
                 </div>
+
+                {/*箭头图标*/}
                 <div className="absolute right-0
 
                                 size-8 rounded-lg
@@ -71,7 +73,7 @@ function Sider({ brightMode }: SiderProps) {
             <div className="flex flex-col gap-10 pt-5 relative text-xl">
                 <div className="lg:pl-[40%] flex justify-center lg:justify-start">
                     <NavLink to={"/"} className={({ isActive}) =>
-                        (isActive && navClicked) ? "text-rose-200" : "text-black"}
+                        (isActive && navClicked) ? "text-rose-200" : "text-black dark:text-white"}
                         onClick={() => {setNavClicked(true)}}>
                         <div className="flex items-center gap-2 duration-200 hover:text-rose-200">
                         {brightMode ? (
@@ -110,7 +112,7 @@ function Sider({ brightMode }: SiderProps) {
                 </div>
                 <div className="lg:pl-[40%] flex justify-center lg:justify-start">
                     <NavLink to={"/userlist"} className={({ isActive }) =>
-                        isActive ? "text-rose-200" : "text-black"}>
+                        isActive ? "text-rose-200" : "text-black dark:text-white"}>
                         <div className="flex items-center gap-2 hover:text-rose-200 duration-200">
                         {brightMode ? (
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
