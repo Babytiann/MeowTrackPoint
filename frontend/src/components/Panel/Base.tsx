@@ -16,9 +16,9 @@ const BaseArea = () =>{
         <div className={`${brightMode ? ' ' : 'dark'}`}>
         <div className="flex  dark:bg-[#3B3B3A] dark:text-white">
             <Sider brightMode={brightMode} ></Sider>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
                 <Header></Header>
-                <Outlet/>
+                <Outlet />
             </div>
         </div></div>
     );

@@ -1,6 +1,6 @@
 function Header(){
     return (
-        <div>
+        <div className="flex h-[8vh] bg-rose-200 rounded-lg">
             111
         </div>
     )

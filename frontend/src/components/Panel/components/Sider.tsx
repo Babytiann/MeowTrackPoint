@@ -37,7 +37,7 @@ function Sider({ brightMode }: SiderProps) {
                                                 peer" onChange={handelClick}/>
 
         <div className="flex flex-col w-[108px] lg:w-[308px] h-[100vh] relative duration-300 peer-checked:w-[108px] en">
-            <div className="flex basis-[15%] justify-center items-center text-center py-[25px]">
+            <div className="flex basis-[15%] justify-center items-center text-center">
 
                 {/* 头像*/}
                 <div className="w-12 rounded-full overflow-hidden">
