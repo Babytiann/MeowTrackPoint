@@ -47,7 +47,7 @@ async function insertData(data: unknown) {
     const { uuid, event, event_data, page_url } = data as {
         uuid?: string,
         event?: string,
-        event_data?: string,
+        event_data?: string | null,
         page_url?: string
     }; //因为data的类型是unknown，所以需要断言一下
 
