@@ -10,6 +10,7 @@ function App() {
           <Route path={"/"} element={<Base />}>
               <Route index element={<Home />}></Route>
               <Route path={"/userlist"} element={<Home />}></Route>  {/*暂且这么写*/}
+              <Route path={"/error"} element={<Home />}></Route>  {/*暂且这么写*/}
           </Route>
           <Route path={"/page"} element={<Page />} />
       </Routes>
