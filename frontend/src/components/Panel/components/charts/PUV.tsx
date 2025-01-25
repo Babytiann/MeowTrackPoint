@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 interface ChartData {
     demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }>;
     errorData?: unknown;
-    timingData?: Array<{ uuid: string; create_at: string; event: string;  page_url: string; FP: number ; DCL: number ; L: number }>;
-    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string;  os: string; referrer: string; }>;
+    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }>;
+    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }>;
 }
 
 function Home() {
@@ -35,18 +35,21 @@ function Home() {
             const allDates: string[] = [];
             const startDate = new Date(demoData[0]?.create_at);  // 获取第一个数据的日期
             const endDate = new Date(demoData[demoData.length - 1]?.create_at);  // 获取最后一个数据的日期
+            // 重置日期的时分秒为0，以确保按小时计算
+            startDate.setUTCHours(0, 0, 0, 0);
+            endDate.setUTCHours(23, 59, 59, 999);
+
             while (startDate <= endDate) {
-                const dateWithHour = `${startDate.toISOString().split('T')[0]} ${startDate.getHours().toString().padStart(2, '0')}`;
+                const dateWithHour = `${startDate.toISOString().split('T')[0]} ${startDate.getUTCHours().toString().padStart(2, '0')}`;
                 allDates.push(dateWithHour);
-                startDate.setHours(startDate.getHours() + 1);  // 下一小时
+                startDate.setUTCHours(startDate.getUTCHours() + 1);  // 下一小时
             }
 
             demoData.forEach(item => {
                 if (item.event !== 'puv') return; // 只统计 puv 事件
 
                 const dateWithTime = item.create_at.split('T').join(' '); // 获取格式 "YYYY-MM-DD HH:mm:ss"
-                let hour = parseInt(dateWithTime.split(' ')[1].split(':')[0], 10);  // 提取小时部分，后面的10表示使用十进制
-                hour = (hour + 8) % 24;       // 加 8 小时，确保不超过 24 小时
+                const hour = new Date(item.create_at).getUTCHours();  // 获取 UTC 小时
                 const dateWithHour = dateWithTime.split(' ')[0] + ' ' + (hour < 10 ? '0' + hour : hour); // 获取格式 "YYYY-MM-DD HH"
 
                 // 统计 PV
