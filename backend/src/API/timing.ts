@@ -26,7 +26,7 @@ async function initDatabase() {
 
         console.log("Table 'timing' is ready.");
     } catch (error) {
-        console.error("create or connect table error", error);
+        console.error("create or connect table 'timing' error", error);
     } finally {
         try {
             await conn.end();  // 确保数据库连接正常关闭
@@ -97,7 +97,7 @@ router
             await insertData(data);
             res.status(200).json({ message: "Data sent to timing successfully" });
         } catch (error) {
-            console.error("Data insertion failed", error);
+            console.error("Data insert to 'timing' failed", error);
             res.status(500).json({ message: "Error inserting data" });
         }
     });

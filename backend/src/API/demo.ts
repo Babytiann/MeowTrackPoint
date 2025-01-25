@@ -25,7 +25,7 @@ async function initDatabase() {
 
         console.log("Table 'demo' is ready.");
     }catch (error){
-        console.error("create or connect table error",error);
+        console.error("create or connect 'demo' table error",error);
     } finally{
         try {
             await conn.end();  // 确保数据库连接正常关闭
@@ -60,7 +60,7 @@ async function insertData(data: unknown) {
         console.log(result);
         console.log(fields);
     } catch (error){
-        console.error("Error inserting data:", error);
+        console.error("Error inserting data in table 'demo':", error);
     }finally {
         try {
             await conn.end();  // 确保数据库连接正常关闭
@@ -84,7 +84,7 @@ router
             await insertData(data);
             res.status(200).json({message: "Data send to demo successfully"});
         } catch (error){
-            console.error("Data send unsuccessfully", error);
+            console.error("Data send to 'demo' unsuccessfully", error);
             res.status(500).json({ message: "Error inserting data" });
         }
     });
