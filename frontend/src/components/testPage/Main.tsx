@@ -15,7 +15,8 @@ function checkAndCreateUUID() {
 function Page() {
 
     const [uuid, setUuid] = useState<string | null>(getUUID());
-    console.log(uuid);
+    const [isUuidReady, setIsUuidReady] = useState(false);
+
     //const sdk = new statisticSDK(uuid);
 
     useEffect(() => {
@@ -26,25 +27,23 @@ function Page() {
         const currentUuid = getUUID();
         if (currentUuid) {
             setUuid(currentUuid);
+            setIsUuidReady(true); // 设置 UUID 后，标记为准备好
         }
+    }, []);
 
-        let data1;
-
-        axios({
-            url: "http://localhost:5927/check",
-            method: 'post',
-            data: {
-                table: "timing"
-            }
-        }).then(res => {
-            console.log("Successfully", res.data)
-            data1 = res.data;
-            console.log(data1[0])
-        });
-
-        //sdk.send("/demo", {event: "sdkTest", event_data: null})
-
-    }, [/*sdk*/]);
+    useEffect(() => {
+        if (isUuidReady && uuid){
+            axios({
+                url: "http://localhost:5927/check",
+                method: 'post',
+                data: {
+                    table: "timing"
+                }
+            }).then(res => {
+                console.log("Successfully", res.data)
+            });
+        }
+    }, [isUuidReady, uuid]);
 
     const list = [
         {id: 1, text: "总的来说，无论是前端还是后端开发，高效的流程和工具选型都是成功的关键因素。开发团队在实践中应根据具体需求和技术背景，灵活调整开发策略，不断优化工作流程，以适应快速发展的技术环境。"},

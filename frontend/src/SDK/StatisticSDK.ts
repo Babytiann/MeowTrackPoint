@@ -66,15 +66,12 @@ class StatisticSDK{
         if (navigationEntry) {
             // 页面首次渲染时间 FP
             const fp = navigationEntry.domInteractive - navigationEntry.startTime;
-            console.log('FP (First Paint):', fp);
 
             // DOM 加载完成时间 DCL
             const dcl = navigationEntry.domContentLoadedEventEnd - navigationEntry.startTime;
-            console.log('DCL (DOM Content Loaded):', dcl);
 
             // 外链资源加载完成时间 L
             const loadTime = navigationEntry.loadEventEnd - navigationEntry.startTime;
-            console.log('L (Load):', loadTime);
 
             timeParams.FP = fp;
             timeParams.DCL = dcl;

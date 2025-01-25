@@ -31,22 +31,36 @@ function Home() {
             const pvData: { [key: string]: number } = {}; // 日期 => PV
             const uvData: { [key: string]: Set<string> } = {}; // 日期 => UV (存储 unique uuid)
 
+            // 生成完整的时间段列表（每小时一个）
+            const allDates: string[] = [];
+            const startDate = new Date(demoData[0]?.create_at);  // 获取第一个数据的日期
+            const endDate = new Date(demoData[demoData.length - 1]?.create_at);  // 获取最后一个数据的日期
+            while (startDate <= endDate) {
+                const dateWithHour = `${startDate.toISOString().split('T')[0]} ${startDate.getHours().toString().padStart(2, '0')}`;
+                allDates.push(dateWithHour);
+                startDate.setHours(startDate.getHours() + 1);  // 下一小时
+            }
+
             demoData.forEach(item => {
                 if (item.event !== 'puv') return; // 只统计 puv 事件
-                const date = item.create_at.split('T')[0]; // 获取日期部分 (格式：YYYY-MM-DD)
+
+                const dateWithTime = item.create_at.split('T').join(' '); // 获取格式 "YYYY-MM-DD HH:mm:ss"
+                let hour = parseInt(dateWithTime.split(' ')[1].split(':')[0], 10);  // 提取小时部分，后面的10表示使用十进制
+                hour = (hour + 8) % 24;       // 加 8 小时，确保不超过 24 小时
+                const dateWithHour = dateWithTime.split(' ')[0] + ' ' + (hour < 10 ? '0' + hour : hour); // 获取格式 "YYYY-MM-DD HH"
 
                 // 统计 PV
-                pvData[date] = (pvData[date] || 0) + 1;
+                pvData[dateWithHour] = (pvData[dateWithHour] || 0) + 1;
 
                 // 统计 UV
-                if (!uvData[date]) uvData[date] = new Set();
-                uvData[date].add(item.uuid);
+                if (!uvData[dateWithHour]) uvData[dateWithHour] = new Set();
+                uvData[dateWithHour].add(item.uuid);
             });
 
-            // 将数据整理成符合 ECharts 需求的格式
-            const dates = Object.keys(pvData); // 所有日期
-            const pvValues = dates.map(date => pvData[date]);
-            const uvValues = dates.map(date => uvData[date].size);
+            // 填充所有时间段的数据
+            const dates = allDates;
+            const pvValues = dates.map(date => pvData[date] || 0);  // 如果没有数据，默认值为 0
+            const uvValues = dates.map(date => uvData[date] ? uvData[date].size : 0);  // 如果没有数据，默认值为 0
 
             const demoDataForChart = dates.map((date, index) => ({
                 date: date,  // 日期
@@ -73,20 +87,14 @@ function Home() {
                     dataZoom: [
                         {
                             type: 'slider',
-                            start: 0,
-                            show: true,
+                            start: 80,
                             end: 100,
+                            show: true,
                             xAxisIndex: [0],
                         },
                         {
-                            type: 'slider',
-                            start: 0,
-                            show: true,
-                            end: 100,
-                            yAxisIndex: [0],
-                        },{
                             type: 'inside',
-                            start: 0,
+                            start: 80,
                             end: 100,
                             xAxisIndex: [0],
                         },
