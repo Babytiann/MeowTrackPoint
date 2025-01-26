@@ -2,6 +2,7 @@ import * as echarts from 'echarts';
 import fetchData from "../../../../SDK/fetchData.ts";
 import processData from "../../../../SDK/processData.ts";
 import { useEffect, useState } from "react";
+import { Select } from 'antd';
 
 // 定义返回的数据结构类型
 interface ChartData {
@@ -97,7 +98,7 @@ function Home() {
             const pvValues = dates.map(date => pvData[date] || 0);  // 如果没有数据，默认值为 0
             const uvValues = dates.map(date => uvData[date] ? uvData[date].size : 0);  // 如果没有数据，默认值为 0
 
-
+            console.log(pvValues)
 
             if (chartElement) {
                 const chart = echarts.init(chartElement);
@@ -176,12 +177,14 @@ function Home() {
         <div className="w-full h-full relative">
             {/* 日期筛选器 */}
             <div className="filters absolute right-[20px] z-10">
-                <select value={dateRange} onChange={(e) => setDateRange(e.target.value as DateRange)}>
-                    <option value="today">当天</option>
-                    <option value="week">本周</option>
-                    <option value="month">本月</option>
-                    <option value="year">全年</option>
-                </select>
+                <Select value={dateRange} onChange={(e) => setDateRange(e as DateRange)}
+                options={[
+                    { label: '当天', value: 'today' },
+                    { label: '本周', value: 'week' },
+                    { label: '本月', value: 'month' },
+                    { label: '本年', value: 'year' },
+                ]}
+                />
             </div>
 
             <div className="chart w-full h-full"></div>
