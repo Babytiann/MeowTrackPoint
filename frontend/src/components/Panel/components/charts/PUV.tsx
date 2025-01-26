@@ -102,6 +102,10 @@ function Home() {
             if (chartElement) {
                 const chart = echarts.init(chartElement);
                 const option = {
+                    title: {
+                        text: '首页PV & UV 数据',  // 这里可以自定义图表的标题
+                        left: 'center',  // 设置标题居中显示
+                    },
                     tooltip: {
                         trigger: "axis",
                         axisPointer: {
@@ -110,6 +114,8 @@ function Home() {
                     },
                     legend: {
                         data: ['PV', 'UV'],
+                        orient: 'vertical',  // 设置图例垂直显示
+                        left: 'left',  // 设置图例的位置为左边
                     },
                     xAxis: {
                         type: 'category',
@@ -167,9 +173,9 @@ function Home() {
     }, [chartData, dateRange]); // 依赖 chartData 和 dateRange 变化时重新渲染
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full relative">
             {/* 日期筛选器 */}
-            <div className="filters">
+            <div className="filters absolute right-[20px] z-10">
                 <select value={dateRange} onChange={(e) => setDateRange(e.target.value as DateRange)}>
                     <option value="today">当天</option>
                     <option value="week">本周</option>
