@@ -11,14 +11,48 @@ interface ChartData {
     baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
 }
 
+type DateRange = 'today' | 'week' | 'month' | 'year';
+
 function Home() {
     const [chartData, setChartData] = useState<ChartData | null>(null);
+    const [dateRange, setDateRange] = useState<DateRange>('week');  // 默认选中“当天”
 
     useEffect(() => {
         fetchData().then((res) => {
             setChartData(res);
         });
     }, []);
+
+    // 计算日期范围
+    const getDateRange = (range: DateRange) => {
+        const currentDate = new Date();
+        const startDate = new Date(currentDate);
+
+        switch (range) {
+            case 'today':
+                startDate.setHours(0, 0, 0, 0);  // 当天从00:00开始
+                break;
+            case 'week':
+                { const dayOfWeek = currentDate.getDay();
+                const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;  // 处理周日作为一周开始的情况
+                startDate.setDate(currentDate.getDate() + diffToMonday);  // 一周的开始日期（周一）
+                startDate.setHours(0, 0, 0, 0);
+                break; }
+            case 'month':
+                startDate.setDate(1);  // 当前月的第一天
+                startDate.setHours(0, 0, 0, 0);
+                break;
+            case 'year':
+                startDate.setMonth(0, 1);  // 当前年的第一天
+                startDate.setHours(0, 0, 0, 0);
+                break;
+            default:
+                break;
+        }
+
+        return startDate;
+    };
+
 
     useEffect(() => {
         const chartElement = document.querySelector('.chart') as HTMLDivElement;
@@ -28,39 +62,42 @@ function Home() {
         currentDate.setSeconds(0, 0);  // 重置秒和毫秒为 0
 
         // 确保 demoData 是数组类型
-        const demoData = chartData?.demoData as Array<{ create_at: string; event: string; uuid: string; page_url: string }>;
+        const demoData = chartData?.demoData as Array<{ create_at: string; event: string; uuid: string; page_url: string }> ?? [];
+
+        // 计算选择的日期范围的开始日期
+        const startDate = getDateRange(dateRange);
+
+        const filteredData = demoData.filter(item => {
+            const itemDate = new Date(item.create_at);
+            return itemDate >= startDate && itemDate <= currentDate;
+        });
+
+
 
         // 计算 PV 和 UV
-        if (demoData) {
+        if (filteredData.length > 0) {
             // 生成完整的时间段列表（每小时一个）
             const allDates: string[] = [];
-            const startDate = new Date(demoData[0]?.create_at);  // 获取第一个数据的日期
+            const firstDataDate = new Date(filteredData[0]?.create_at);
 
             // 重置日期的时分秒为0，以确保按小时计算
-            startDate.setUTCHours(0, 0, 0, 0);
+            firstDataDate.setUTCHours(0, 0, 0, 0);
             currentDate.setUTCHours(currentDate.getUTCHours() + 8, 0, 0, 0); // 当前时间的整点
 
-
-            while (startDate <= currentDate) {
-                const dateWithHour = `${startDate.toISOString().split('T')[0]} ${startDate.getUTCHours().toString().padStart(2, '0')}`;
+            while (firstDataDate <= currentDate) {
+                const dateWithHour = `${firstDataDate.toISOString().split('T')[0]} ${firstDataDate.getUTCHours().toString().padStart(2, '0')}`;
                 allDates.push(dateWithHour);
-                startDate.setUTCHours(startDate.getUTCHours() + 1);  // 下一小时
+                firstDataDate.setUTCHours(firstDataDate.getUTCHours() + 1);  // 下一小时
             }
 
-            const {pvData, uvData} = processData(demoData);
+            const {pvData, uvData} = processData(filteredData);
 
             // 填充所有时间段的数据
             const dates = allDates;
             const pvValues = dates.map(date => pvData[date] || 0);  // 如果没有数据，默认值为 0
             const uvValues = dates.map(date => uvData[date] ? uvData[date].size : 0);  // 如果没有数据，默认值为 0
 
-            const demoDataForChart = dates.map((date, index) => ({
-                date: date,  // 日期
-                pv: pvValues[index],  // PV
-                uv: uvValues[index],  // UV
-            }));
 
-            console.log(demoDataForChart);  // 输出处理后的数据
 
             if (chartElement) {
                 const chart = echarts.init(chartElement);
@@ -84,14 +121,14 @@ function Home() {
                     dataZoom: [
                         {
                             type: 'slider',
-                            start: 80,
+                            start: 0,
                             end: 100,
                             show: true,
                             xAxisIndex: [0],
                         },
                         {
                             type: 'inside',
-                            start: 80,
+                            start: 0,
                             end: 100,
                             xAxisIndex: [0],
                         },
@@ -127,11 +164,23 @@ function Home() {
                 };
             }
         }
-    }, [chartData]); // 依赖 chartData 变化时重新渲染
+    }, [chartData, dateRange]); // 依赖 chartData 和 dateRange 变化时重新渲染
 
     return (
-        <div className="chart w-full h-full"></div>
-    )
+        <div className="w-full h-full">
+            {/* 日期筛选器 */}
+            <div className="filters">
+                <select value={dateRange} onChange={(e) => setDateRange(e.target.value as DateRange)}>
+                    <option value="today">当天</option>
+                    <option value="week">本周</option>
+                    <option value="month">本月</option>
+                    <option value="year">全年</option>
+                </select>
+            </div>
+
+            <div className="chart w-full h-full"></div>
+        </div>
+    );
 }
 
 export default Home;
