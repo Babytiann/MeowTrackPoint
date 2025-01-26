@@ -65,7 +65,12 @@ function Home() {
             if (chartElement) {
                 const chart = echarts.init(chartElement);
                 const option = {
-                    tooltip: {},
+                    tooltip: {
+                        trigger: "axis",
+                        axisPointer: {
+                            type: "cross"
+                        },
+                    },
                     legend: {
                         data: ['PV', 'UV'],
                     },
