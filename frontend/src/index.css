@@ -1,9 +1,7 @@
 @import "./style/font.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 *,
 *::before,
@@ -11,11 +9,15 @@
   box-sizing: border-box;
 }
 
-@layer utilities{
+@layer base{
   .en{
     font-family: 'Comic Neue', sans-serif;
   }
   .cn{
     font-family: 'fontslab-dongmanerciyuanRg', sans-serif;
   }
+}
+
+@theme {
+  --color-darkBg: #3B3B3A;
 }
