@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 
 // 定义返回的数据结构类型
 interface ChartData {
-    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }>;
+    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }> ;
     errorData?: unknown;
-    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }>;
-    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }>;
+    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }> ;
+    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
 }
 
 function Home() {
@@ -22,6 +22,10 @@ function Home() {
     useEffect(() => {
         const chartElement = document.querySelector('.chart') as HTMLDivElement;
 
+        // 获取当前时间，作为结束时间
+        const currentDate = new Date();
+        currentDate.setSeconds(0, 0);  // 重置秒和毫秒为 0
+
         // 确保 demoData 是数组类型
         const demoData = chartData?.demoData as Array<{ create_at: string; event: string; uuid: string; page_url: string }>;
 
@@ -34,12 +38,13 @@ function Home() {
             // 生成完整的时间段列表（每小时一个）
             const allDates: string[] = [];
             const startDate = new Date(demoData[0]?.create_at);  // 获取第一个数据的日期
-            const endDate = new Date(demoData[demoData.length - 1]?.create_at);  // 获取最后一个数据的日期
+
             // 重置日期的时分秒为0，以确保按小时计算
             startDate.setUTCHours(0, 0, 0, 0);
-            endDate.setUTCHours(23, 59, 59, 999);
+            currentDate.setUTCHours(currentDate.getUTCHours() + 8, 0, 0, 0); // 当前时间的整点
 
-            while (startDate <= endDate) {
+
+            while (startDate <= currentDate) {
                 const dateWithHour = `${startDate.toISOString().split('T')[0]} ${startDate.getUTCHours().toString().padStart(2, '0')}`;
                 allDates.push(dateWithHour);
                 startDate.setUTCHours(startDate.getUTCHours() + 1);  // 下一小时

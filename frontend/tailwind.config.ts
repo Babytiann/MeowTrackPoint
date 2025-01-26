@@ -10,6 +10,7 @@ export default {
     extend: {
       colors:{
         custYellow: "#F5FFEC",
+        darkBg: "#3B3B3A",
       }
     },
   },
