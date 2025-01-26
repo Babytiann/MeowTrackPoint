@@ -14,13 +14,14 @@ const BaseArea = () =>{
 
     return (
         <div className={`${brightMode ? ' ' : 'dark'}`}>
-        <div className="flex  dark:bg-darkBg dark:text-white">
-            <Sider brightMode={brightMode} ></Sider>
-            <div className="grow flex flex-col">
-                <Header></Header>
-                <Outlet />
-            </div>
-        </div></div>
+          <div className="flex  dark:bg-darkBg dark:text-white">
+             <Sider brightMode={brightMode} ></Sider>
+             <div className="grow flex flex-col">
+                 <Header></Header>
+                 <Outlet />
+             </div>
+          </div>
+        </div>
     );
 };
 
