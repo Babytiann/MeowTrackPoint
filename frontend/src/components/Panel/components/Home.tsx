@@ -1,4 +1,5 @@
 import Puv from './charts/PUV';
+import PiePuv from './charts/PiePUV';
 
 function Home() {
     return (
@@ -6,8 +7,9 @@ function Home() {
             <div className="w-full h-[50%]">
                 <Puv />
             </div>
-
-            <div className="chart w-full h-[50%]"></div>
+            <div className="w-full h-[50%]">
+                <PiePuv />
+            </div>
         </div>
     )
 }

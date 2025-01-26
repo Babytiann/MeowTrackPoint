@@ -1,5 +1,6 @@
 import * as echarts from 'echarts';
 import fetchData from "../../../../SDK/fetchData.ts";
+import processData from "../../../../SDK/processData.ts";
 import { useEffect, useState } from "react";
 
 // 定义返回的数据结构类型
@@ -31,10 +32,6 @@ function Home() {
 
         // 计算 PV 和 UV
         if (demoData) {
-            // 用于存储每个日期的 PV 和 UV
-            const pvData: { [key: string]: number } = {}; // 日期 => PV
-            const uvData: { [key: string]: Set<string> } = {}; // 日期 => UV (存储 unique uuid)
-
             // 生成完整的时间段列表（每小时一个）
             const allDates: string[] = [];
             const startDate = new Date(demoData[0]?.create_at);  // 获取第一个数据的日期
@@ -50,20 +47,7 @@ function Home() {
                 startDate.setUTCHours(startDate.getUTCHours() + 1);  // 下一小时
             }
 
-            demoData.forEach(item => {
-                if (item.event !== 'puv') return; // 只统计 puv 事件
-
-                const dateWithTime = item.create_at.split('T').join(' '); // 获取格式 "YYYY-MM-DD HH:mm:ss"
-                const hour = new Date(item.create_at).getUTCHours();  // 获取 UTC 小时
-                const dateWithHour = dateWithTime.split(' ')[0] + ' ' + (hour < 10 ? '0' + hour : hour); // 获取格式 "YYYY-MM-DD HH"
-
-                // 统计 PV
-                pvData[dateWithHour] = (pvData[dateWithHour] || 0) + 1;
-
-                // 统计 UV
-                if (!uvData[dateWithHour]) uvData[dateWithHour] = new Set();
-                uvData[dateWithHour].add(item.uuid);
-            });
+            const {pvData, uvData} = processData(demoData);
 
             // 填充所有时间段的数据
             const dates = allDates;
