@@ -1,6 +1,7 @@
 import * as echarts from 'echarts';
-import fetchData from "../../../../SDK/fetchData.ts";
-import processData from "../../../../SDK/processData.ts";
+import fetchData from "../../../../services/fetchData.ts";
+import processData from "../../../../services/processData.ts";
+import getDateRange from "../../../../services/getDateRange.ts";
 import { useEffect, useState } from "react";
 import { Select } from 'antd';
 
@@ -23,37 +24,6 @@ function Home() {
             setChartData(res);
         });
     }, []);
-
-    // 计算日期范围
-    const getDateRange = (range: DateRange) => {
-        const currentDate = new Date();
-        const startDate = new Date(currentDate);
-
-        switch (range) {
-            case 'today':
-                startDate.setHours(0, 0, 0, 0);  // 当天从00:00开始
-                break;
-            case 'week':
-                { const dayOfWeek = currentDate.getDay();
-                const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;  // 处理周日作为一周开始的情况
-                startDate.setDate(currentDate.getDate() + diffToMonday);  // 一周的开始日期（周一）
-                startDate.setHours(0, 0, 0, 0);
-                break; }
-            case 'month':
-                startDate.setDate(1);  // 当前月的第一天
-                startDate.setHours(0, 0, 0, 0);
-                break;
-            case 'year':
-                startDate.setMonth(0, 1);  // 当前年的第一天
-                startDate.setHours(0, 0, 0, 0);
-                break;
-            default:
-                break;
-        }
-
-        return startDate;
-    };
-
 
     useEffect(() => {
         const chartElement = document.querySelector('.chart') as HTMLDivElement;
@@ -88,7 +58,7 @@ function Home() {
             currentHour.setHours(currentHour.getHours() + 1);
         }
 
-        const { pvData, uvData } = processData(filteredData);
+        const { pvData, uvData } = processData(filteredData, "puv");
 
         const pvValues = allDates.map(date => pvData[date] || 0);
         const uvValues = allDates.map(date => uvData[date]?.size || 0);
@@ -97,7 +67,7 @@ function Home() {
         const option = {
             title: { text: '首页PV & UV 数据', left: 'center' },
             tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
-            legend: { data: ['PV', 'UV'], left: 'left' },
+            legend: { data: ['PV', 'UV'], left: 'left', orient: "vertical", itemGap: 20 },
             xAxis: { type: 'category', data: allDates },
             yAxis: { type: 'value' },
             dataZoom: [

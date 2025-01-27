@@ -1,6 +1,6 @@
 import * as echarts from 'echarts';
-import fetchData from "../../../../SDK/fetchData.ts";
-import processData from "../../../../SDK/processData.ts";
+import fetchData from "../../../../services/fetchData.ts";
+import processData from "../../../../services/processData.ts";
 import { useEffect, useState } from "react";
 
 // 定义返回的数据结构类型
@@ -11,7 +11,7 @@ interface ChartData {
     baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
 }
 
-function Home() {
+function PiePUV() {
     const [chartData, setChartData] = useState<ChartData | null>(null);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ function Home() {
         if (demoData) {
 
             // 统计 PV 和 UV
-            const { pvData, uvData } = processData(demoData);
+            const { pvData, uvData } = processData(demoData, "puv");
 
             // 计算 PV 和 UV 总数
             const totalPv = Object.values(pvData).reduce((acc, pv) => acc + pv, 0);
@@ -92,4 +92,4 @@ function Home() {
     )
 }
 
-export default Home;
+export default PiePUV;

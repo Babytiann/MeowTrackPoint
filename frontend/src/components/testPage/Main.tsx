@@ -2,7 +2,7 @@ import Error from "../ErrorPage/Error.tsx";
 import { createUuid, getUUID} from "../../services/cookies.ts";
 import {useState, useEffect, useRef} from "react";
 import axios from "axios";
-import statisticSDK from "../../SDK/StatisticSDK.ts";
+//import statisticSDK from "../../SDK/StatisticSDK.ts";
 
 // 在 Page 组件外部执行创建 UUID，以确保页面加载时执行一次
 function checkAndCreateUUID() {
@@ -16,7 +16,7 @@ function Page() {
 
     const [uuid, setUuid] = useState<string | null>(getUUID());
     const [isUuidReady, setIsUuidReady] = useState(false);
-    const sdkRef = useRef<statisticSDK | null>(null); // 用于存储 SDK 实例
+    //const sdkRef = useRef<statisticSDK | null>(null); // 用于存储 SDK 实例
 
     useEffect(() => {
         // 检查并创建 UUID
@@ -31,8 +31,8 @@ function Page() {
     }, []);
 
     useEffect(() => {
-        if (isUuidReady && uuid && !sdkRef.current){
-            sdkRef.current = new statisticSDK(uuid);
+        if (isUuidReady && uuid /*&& !sdkRef.current*/){
+            //sdkRef.current = new statisticSDK(uuid);
             axios({
                 url: "http://localhost:5927/check",
                 method: 'post',
@@ -104,7 +104,7 @@ function Page() {
              </div>
             <div className="w-[100px] h-20 bg-rose-200">
                 <button className="w-full z-10" onClick={() => {
-                    sdkRef.current?.send("/demo", {event: "click", event_data: null});
+                    //sdkRef.current?.send("/demo", {event: "click", event_data: null});
                 }}>click me</button>
             </div>
         </>
