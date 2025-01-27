@@ -73,120 +73,68 @@ function Home() {
             return itemDate >= startDate && itemDate <= currentDate;
         });
 
+        if (filteredData.length === 0) return;
 
+        // 生成完整时间段列表（从startDate到currentDate每小时）
+        const allDates: string[] = [];
+        const currentHour = new Date(startDate.getTime());
 
-        // 计算 PV 和 UV
-        if (filteredData.length > 0) {
-            // 生成完整的时间段列表（每小时一个）
-            const allDates: string[] = [];
-            const firstDataDate = new Date(filteredData[0]?.create_at);
-
-            // 重置日期的时分秒为0，以确保按小时计算
-            firstDataDate.setUTCHours(0, 0, 0, 0);
-            currentDate.setUTCHours(currentDate.getUTCHours() + 8, 0, 0, 0); // 当前时间的整点
-
-            while (firstDataDate <= currentDate) {
-                const dateWithHour = `${firstDataDate.toISOString().split('T')[0]} ${firstDataDate.getUTCHours().toString().padStart(2, '0')}`;
-                allDates.push(dateWithHour);
-                firstDataDate.setUTCHours(firstDataDate.getUTCHours() + 1);  // 下一小时
-            }
-
-            const {pvData, uvData} = processData(filteredData);
-
-            // 填充所有时间段的数据
-            const dates = allDates;
-            const pvValues = dates.map(date => pvData[date] || 0);  // 如果没有数据，默认值为 0
-            const uvValues = dates.map(date => uvData[date] ? uvData[date].size : 0);  // 如果没有数据，默认值为 0
-
-            console.log(pvValues)
-
-            if (chartElement) {
-                const chart = echarts.init(chartElement);
-                const option = {
-                    title: {
-                        text: '首页PV & UV 数据',  // 这里可以自定义图表的标题
-                        left: 'center',  // 设置标题居中显示
-                    },
-                    tooltip: {
-                        trigger: "axis",
-                        axisPointer: {
-                            type: "cross"
-                        },
-                    },
-                    legend: {
-                        data: ['PV', 'UV'],
-                        orient: 'vertical',  // 设置图例垂直显示
-                        left: 'left',  // 设置图例的位置为左边
-                    },
-                    xAxis: {
-                        type: 'category',
-                        data: dates,  // 使用日期作为 X 轴数据
-                    },
-                    yAxis: {
-                        type: 'value',
-                    },
-                    dataZoom: [
-                        {
-                            type: 'slider',
-                            start: 0,
-                            end: 100,
-                            show: true,
-                            xAxisIndex: [0],
-                        },
-                        {
-                            type: 'inside',
-                            start: 0,
-                            end: 100,
-                            xAxisIndex: [0],
-                        },
-                        {
-                            type: 'inside',
-                            start: 0,
-                            end: 100,
-                            yAxisIndex: [0],
-                        }
-                    ],
-                    series: [
-                        {
-                            name: 'PV',
-                            type: 'line',
-                            data: pvValues,  // PV 数据
-                        },
-                        {
-                            name: 'UV',
-                            type: 'line',
-                            data: uvValues,  // UV 数据
-                        },
-                    ],
-                };
-
-                chart.setOption(option);
-
-                window.addEventListener('resize', function () {
-                    chart.resize();
-                });
-
-                return () => {
-                    chart.dispose();
-                };
-            }
+        while (currentHour <= currentDate) {
+            const year = currentHour.getFullYear();
+            const month = String(currentHour.getMonth() + 1).padStart(2, '0');
+            const day = String(currentHour.getDate()).padStart(2, '0');
+            const hour = String(currentHour.getHours()).padStart(2, '0');
+            allDates.push(`${year}-${month}-${day} ${hour}`);
+            currentHour.setHours(currentHour.getHours() + 1);
         }
-    }, [chartData, dateRange]); // 依赖 chartData 和 dateRange 变化时重新渲染
+
+        const { pvData, uvData } = processData(filteredData);
+
+        const pvValues = allDates.map(date => pvData[date] || 0);
+        const uvValues = allDates.map(date => uvData[date]?.size || 0);
+
+        const chart = echarts.init(chartElement);
+        const option = {
+            title: { text: '首页PV & UV 数据', left: 'center' },
+            tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
+            legend: { data: ['PV', 'UV'], left: 'left' },
+            xAxis: { type: 'category', data: allDates },
+            yAxis: { type: 'value' },
+            dataZoom: [
+                { type: 'slider', start: 0, end: 100, xAxisIndex: [0] },
+                { type: 'inside', xAxisIndex: [0] },
+                { type: 'inside', yAxisIndex: [0] }
+            ],
+            series: [
+                { name: 'PV', type: 'line', data: pvValues },
+                { name: 'UV', type: 'line', data: uvValues }
+            ]
+        };
+
+        chart.setOption(option);
+        const resizeHandler = () => chart.resize();
+        window.addEventListener('resize', resizeHandler);
+
+        return () => {
+            window.removeEventListener('resize', resizeHandler);
+            chart.dispose();
+        };
+    }, [chartData, dateRange]);
 
     return (
         <div className="w-full h-full relative">
-            {/* 日期筛选器 */}
             <div className="filters absolute right-[20px] z-10">
-                <Select value={dateRange} onChange={(e) => setDateRange(e as DateRange)}
-                options={[
-                    { label: '当天', value: 'today' },
-                    { label: '本周', value: 'week' },
-                    { label: '本月', value: 'month' },
-                    { label: '本年', value: 'year' },
-                ]}
+                <Select
+                    value={dateRange}
+                    onChange={(e) => setDateRange(e as DateRange)}
+                    options={[
+                        { label: '当天', value: 'today' },
+                        { label: '本周', value: 'week' },
+                        { label: '本月', value: 'month' },
+                        { label: '本年', value: 'year' },
+                    ]}
                 />
             </div>
-
             <div className="chart w-full h-full"></div>
         </div>
     );
