@@ -1,17 +1,15 @@
 import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
-import processData from "../../../../services/processData.ts";
 import { useEffect, useState } from "react";
 
 // 定义返回的数据结构类型
 interface ChartData {
-    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }> ;
+    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
     errorData?: unknown;
     timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }> ;
-    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
 }
 
-function PiePUV() {
+function RoseChart() {
     const [chartData, setChartData] = useState<ChartData | null>(null);
 
     useEffect(() => {
@@ -27,40 +25,48 @@ function PiePUV() {
         const currentDate = new Date();
         currentDate.setSeconds(0, 0);  // 重置秒和毫秒为 0
 
-        // 确保 demoData 是数组类型
-        const demoData = chartData?.demoData as Array<{ create_at: string; event: string; uuid: string; page_url: string }>;
+        // 确保 baseInfoData 是数组类型
+        const baseInfoData = chartData?.baseInfoData as Array<{ create_at: string; referrer: string; uuid: string }>;
 
 
-        if (demoData) {
+        if (baseInfoData) {
+            // 用一个 Map 来存储每个用户唯一的来源
+            const userSourceMap = new Map<string, string>();
 
-            // 统计 PV 和 UV
-            const { pvData, uvData } = processData(demoData, "puv");
+            baseInfoData.forEach((item) => {
+                if (item.referrer && (!userSourceMap.has(item.uuid) || userSourceMap.get(item.uuid) !== item.referrer)) {
+                    userSourceMap.set(item.uuid, item.referrer);
+                }
+            });
 
-            // 计算 PV 和 UV 总数
-            const totalPv = Object.values(pvData).reduce((acc, pv) => acc + pv, 0);
-            const totalUv = Object.values(uvData).reduce((acc, uv) => acc + uv.size, 0);
+            // 根据来源统计每个来源的访问量
+            const sourceCount: Record<string, number> = {};
 
-            // 准备饼图数据
-            const pieData = [
-                { value: totalPv, name: 'PV' },
-                { value: totalUv, name: 'UV' },
-            ];
+            userSourceMap.forEach((referrer) => {
+                if (sourceCount[referrer]) {
+                    sourceCount[referrer]++;
+                } else {
+                    sourceCount[referrer] = 1;
+                }
+            });
+
+            // 将统计数据转换为饼图需要的数据格式
+            const pieData = Object.keys(sourceCount).map((source) => ({
+                value: sourceCount[source],
+                name: source || 'Unknown',
+            }));
 
             if (chartElement) {
-                const chart = echarts.init(chartElement);
+                const chart = echarts.init(chartElement, 'chalk');
                 const option = {
                     tooltip: {
                         trigger: 'item',
                         formatter: '{a} <br/>{b}: {c} ({d}%)',  // 提示框格式
                     },
-                    legend: {
-                        data: ['PV', 'UV'],
-                    },
                     series: [
                         {
-                            name: 'visitor Source',
+                            name: 'User Source',
                             type: 'pie',
-                            radius: '50%',
                             data: pieData,
                             emphasis: {
                                 itemStyle: {
@@ -72,6 +78,7 @@ function PiePUV() {
                             },
                         },
                     ],
+                    roseType: "area", // 玫瑰图
                 };
 
                 chart.setOption(option);
@@ -89,7 +96,7 @@ function PiePUV() {
 
     return (
         <div className="ReferrerChart w-full h-full"></div>
-    )
+    );
 }
 
-export default PiePUV;
+export default RoseChart;

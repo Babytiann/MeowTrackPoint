@@ -2,6 +2,8 @@ import {useState} from "react";
 import {Outlet} from "react-router";
 import Sider from "./components/Sider";
 import Header from "./components/Header";
+import theme from "../../EchartTheme.json"
+import * as echarts from "echarts";
 
 
 const BaseArea = () =>{
@@ -11,6 +13,8 @@ const BaseArea = () =>{
     const toggleMode = () => {
         setBrightMode(prevMode => !prevMode);  // 切换模式
     };
+
+    echarts.registerTheme('chalk', theme);
 
     return (
         <div className={`${brightMode ? ' ' : 'dark'}`}>

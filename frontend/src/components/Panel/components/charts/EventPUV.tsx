@@ -90,7 +90,7 @@ function EventPUV() {
             );
         }
 
-        const chart = echarts.init(chartElement);
+        const chart = echarts.init(chartElement, 'chalk');
         const option = {
             title: { text: '事件PV & UV', left: 'center' },
             tooltip: { trigger: "axis", axisPointer: { type: "cross" } },

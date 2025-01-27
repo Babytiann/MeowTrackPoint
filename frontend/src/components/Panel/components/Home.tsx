@@ -7,8 +7,8 @@ function Home() {
     return (
         <div className="flex flex-col gap-10 mt-[5%] h-[1000px]">
             <div className="flex flex-col md:flex-row w-full h-full">
-                <PiePuv />
                 <Referrer />
+                <PiePuv />
             </div>
             <div className="w-full h-full">
                 <Puv />

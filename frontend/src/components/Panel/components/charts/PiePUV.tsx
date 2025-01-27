@@ -47,7 +47,7 @@ function PiePUV() {
             ];
 
             if (chartElement) {
-                const chart = echarts.init(chartElement);
+                const chart = echarts.init(chartElement, 'chalk');
                 const option = {
                     tooltip: {
                         trigger: 'item',
@@ -60,7 +60,6 @@ function PiePUV() {
                         {
                             name: 'PV & UV',
                             type: 'pie',
-                            radius: '50%',
                             data: pieData,
                             emphasis: {
                                 itemStyle: {

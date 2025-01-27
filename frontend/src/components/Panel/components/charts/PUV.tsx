@@ -41,7 +41,7 @@ function PUV() {
         const pvValues = allDates.map((date) => pvData[date] || 0);
         const uvValues = allDates.map((date) => uvData[date]?.size || 0);
 
-        const chart = echarts.init(chartElement);
+        const chart = echarts.init(chartElement, 'chalk');
         const option = {
             title: { text: '首页PV & UV ', left: 'center' },
             tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
