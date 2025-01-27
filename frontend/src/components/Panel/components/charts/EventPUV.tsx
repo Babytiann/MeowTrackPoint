@@ -45,7 +45,6 @@ function EventPUV() {
         // 如果 filteredData 或 allDates 为 undefined，提前返回
         if (!filteredData?.length || !allDates) return;
 
-        optionList.current.push({ label: 'total', value: 'total' });
 
         // 更新 optionList 数据
         optionList.current = Array.from(
@@ -58,6 +57,8 @@ function EventPUV() {
             label: event,
             value: event
         }));
+
+        optionList.current.push({ label: 'total', value: 'total' });
 
 
         // 为选择的事件类型生成数据
@@ -126,7 +127,7 @@ function EventPUV() {
 
     return (
         <div className="w-full h-full relative">
-            <div className="filters flex flex-col md:flex-row gap-5 absolute right-0 md:right-[200px] z-10">
+            <div className="filters flex flex-col md:flex-row gap-5 absolute right-0 md:right-[20px] z-10">
                 <Select
                     value={dateRange}
                     onChange={(e) => setDateRange(e as DateRange)}
