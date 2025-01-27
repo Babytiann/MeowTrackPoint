@@ -43,7 +43,7 @@ function PUV() {
 
         const chart = echarts.init(chartElement);
         const option = {
-            title: { text: '首页PV & UV 数据', left: 'center' },
+            title: { text: '首页PV & UV ', left: 'center' },
             tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
             legend: { data: ['PV', 'UV'], left: 'left', orient: "vertical", itemGap: 20 },
             xAxis: { type: 'category', data: allDates },

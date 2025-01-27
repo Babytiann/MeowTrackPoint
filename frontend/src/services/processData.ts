@@ -4,13 +4,11 @@ interface DemoData {
     event: string;
 }
 
-function processData(demoData: DemoData[], type: string) {
+function processData(demoData: DemoData[], type: string = "") {
     const pvData: { [key: string]: number } = {};
     const uvData: { [key: string]: Set<string> } = {};
 
     // 过滤出需要的事件
-
-
     demoData.forEach(item => {
         // 只处理指定类型的事件
         if (item.event !== type) return;
