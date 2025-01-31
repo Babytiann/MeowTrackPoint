@@ -2,15 +2,16 @@ import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
 import processData from "../../../../services/processData.ts";
 import processDate from "../../../../services/processDate.ts";
+import generateFallbackDates from "../../../../services/generateFallbackDates.ts";
 import { useEffect, useState, useRef } from "react";
 import { Select } from 'antd';
 
 // 定义返回的数据结构类型
 interface ChartData {
-    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }> ;
+    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }>;
     errorData?: unknown;
-    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }> ;
-    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
+    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }>;
+    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }>;
 }
 
 interface SeriesData {
@@ -23,9 +24,10 @@ type DateRange = 'today' | 'week' | 'month' | 'year';
 
 function EventPUV() {
     const [chartData, setChartData] = useState<ChartData | null>(null);
-    const [dateRange, setDateRange] = useState<DateRange>('week');  // 默认选中“当天”
+    const [dateRange, setDateRange] = useState<DateRange>('week');  // 默认选中“本周”
     const [eventType, setEventType] = useState<string>('total');
-    const optionList = useRef<{ label: string; value: string }[]>([]); // 使用 useRef 来存储 optionList
+    const optionList = useRef<{ label: string; value: string }[]>([]);
+    const chartInstance = useRef<echarts.ECharts | null>(null);
 
     useEffect(() => {
         fetchData().then((res) => {
@@ -34,17 +36,16 @@ function EventPUV() {
         });
     }, []);
 
+    // 处理图表渲染
     useEffect(() => {
         const chartElement = document.querySelector('.EventChart') as HTMLDivElement;
+        if (!chartElement || !chartData) return;
 
-        if (!chartData) return;
+        // 获取日期范围（即使没有数据）
+        const { filteredData = [], allDates = [] } = processDate(chartData, dateRange) || {};
 
-        // 使用可选链来避免手动判断 null 或 undefined
-        const { filteredData, allDates } = processDate(chartData, dateRange) ?? {};
-
-        // 如果 filteredData 或 allDates 为 undefined，提前返回
-        if (!filteredData?.length || !allDates) return;
-
+        // 强制生成日期范围（兼容空数据）
+        const safeDates = allDates.length > 0 ? allDates : generateFallbackDates(dateRange);
 
         // 更新 optionList 数据
         optionList.current = Array.from(
@@ -63,18 +64,26 @@ function EventPUV() {
 
         // 为选择的事件类型生成数据
         const series: SeriesData[] = [];
-        if (eventType === 'total') {
-            // 如果选择了 'total'，遍历所有事件
+
+        // 判断是否处理所有事件（total模式）
+        const shouldProcessTotal = eventType === 'total' && optionList.current.length > 1;
+
+        if (shouldProcessTotal) {
+            // 处理所有事件
             optionList.current.forEach((option) => {
-                if (option.value === 'total') return; // 跳过 'total' 选项本身
+                if (option.value === 'total') return;
                 const { pvData, uvData } = processData(filteredData, option.value);
 
-                const pvValues = allDates.map(date => pvData[date] || 0);
-                const uvValues = allDates.map(date => uvData[date]?.size || 0);
-
                 series.push(
-                    { name: `${option.value} PV`, type: 'line', data: pvValues },
-                    { name: `${option.value} UV`, type: 'line', data: uvValues }
+                    {
+                        name: `${option.value} PV`,
+                        type: 'line',
+                        data: safeDates.map(date => pvData[date] || 0)
+                    }, {
+                        name: `${option.value} UV`,
+                        type: 'line',
+                        data: safeDates.map(date => uvData[date]?.size || 0)
+                    }
                 );
             });
         } else {
@@ -90,10 +99,20 @@ function EventPUV() {
             );
         }
 
-        const chart = echarts.init(chartElement, 'chalk');
+        // 初始化或更新图表
+        if (!chartInstance.current) {
+            chartInstance.current = echarts.init(chartElement, 'chalk');
+        }
+
         const option = {
-            title: { text: '事件PV & UV', left: 'center' },
-            tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
+            title: {
+                text: '事件PV & UV',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: "axis",
+                axisPointer: { type: "cross" }
+            },
             legend: {
                 data: series.map(item => item.name),
                 left: 'left',
@@ -102,7 +121,7 @@ function EventPUV() {
             },
             xAxis: {
                 type: 'category',
-                data: allDates
+                data: safeDates
             },
             yAxis: {
                 type: 'value'
@@ -115,28 +134,34 @@ function EventPUV() {
             series: series
         };
 
-        chart.setOption(option);
-        const resizeHandler = () => chart.resize();
+        chartInstance.current.setOption(option);
+
+        // 窗口大小调整时重新渲染图表
+        const resizeHandler = () => chartInstance.current?.resize();
         window.addEventListener('resize', resizeHandler);
 
         return () => {
             window.removeEventListener('resize', resizeHandler);
-            chart.dispose();
+            chartInstance.current?.dispose();
+            chartInstance.current = null;
         };
     }, [chartData, dateRange, eventType]);
 
     return (
         <div className="w-full h-full relative">
             <div className="filters flex flex-col md:flex-row gap-5 absolute right-0 md:right-[20px] z-10">
+                {/* 时间范围选择器 */}
                 <Select
                     value={dateRange}
-                    onChange={(e) => setDateRange(e as DateRange)}
+                    onChange={(e: DateRange) => setDateRange(e)}
                     options={[
                         { label: '当天', value: 'today' },
                         { label: '本周', value: 'week' },
                         { label: '本月', value: 'month' },
-                        { label: '本年', value: 'year' },]}
+                        { label: '本年', value: 'year' },
+                    ]}
                 />
+                {/* 事件类型选择器 */}
                 <Select
                     value={eventType}
                     style={{ width: 100 }}

@@ -2,22 +2,23 @@ import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
 import processData from "../../../../services/processData.ts";
 import processDate from "../../../../services/processDate.ts";
+import generateFallbackDates from "../../../../services/generateFallbackDates.ts";
 import { useEffect, useState } from "react";
 import { Select } from 'antd';
 
 // 定义返回的数据结构类型
 interface ChartData {
-    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }> ;
+    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }>;
     errorData?: unknown;
-    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }> ;
-    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
+    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }>;
+    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }>;
 }
 
 type DateRange = 'today' | 'week' | 'month' | 'year';
 
 function PUV() {
     const [chartData, setChartData] = useState<ChartData | null>(null);
-    const [dateRange, setDateRange] = useState<DateRange>('week');  // 默认选中“当天”
+    const [dateRange, setDateRange] = useState<DateRange>('week');  // 默认选中“本周”
 
     useEffect(() => {
         fetchData().then((res) => {
@@ -28,25 +29,28 @@ function PUV() {
     useEffect(() => {
         const chartElement = document.querySelector('.chart') as HTMLDivElement;
 
-        if (!chartData) return;
+        // 获取日期范围和过滤后的数据（即使为空数组）
+        const { filteredData = [], allDates = [] } = processDate(chartData, dateRange) || {};
 
-        // 使用可选链来避免手动判断 null 或 undefined
-        const { filteredData, allDates } = processDate(chartData, dateRange) ?? {};
+        // 如果allDates为空（发生在完全没有数据时），手动生成日期范围
+        const safeDates = allDates.length > 0
+            ? allDates
+            : generateFallbackDates(dateRange);
 
-        // 如果 filteredData 或 allDates 为 undefined，提前返回
-        if (!filteredData?.length || !allDates) return;
-
+        // 处理数据（兼容空数组）
         const { pvData, uvData } = processData(filteredData, "puv");
 
-        const pvValues = allDates.map((date) => pvData[date] || 0);
-        const uvValues = allDates.map((date) => uvData[date]?.size || 0);
+        // 确保每个日期都有值
+        const pvValues = safeDates.map(date => pvData[date] || 0);
+        const uvValues = safeDates.map(date => (uvData[date] ? uvData[date].size : 0));
 
+        // 渲染图表
         const chart = echarts.init(chartElement, 'chalk');
         const option = {
             title: { text: '首页PV & UV ', left: 'center' },
             tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
             legend: { data: ['PV', 'UV'], left: 'left', orient: "vertical", itemGap: 20 },
-            xAxis: { type: 'category', data: allDates },
+            xAxis: { type: 'category', data: safeDates },
             yAxis: { type: 'value' },
             dataZoom: [
                 { type: 'slider', start: 0, end: 100, xAxisIndex: [0] },
