@@ -1,20 +1,26 @@
-import {Route, Routes} from "react-router";
+import { Route, Routes } from "react-router";
+import { Suspense, lazy } from "react";
+import Loading from "./components/Panel/Loading";
 
-import Page from './components/testPage/Main.tsx';
-import Base from "./components/Panel/Base.tsx";
-import Home from "./components/Panel/components/Home.tsx";
+// 使用 React.lazy 动态加载组件
+const Page = lazy(() => import('./components/testPage/Main.tsx'));
+const Base = lazy(() => import("./components/Panel/Base.tsx"));
+const Home = lazy(() => import("./components/Panel/components/Home.tsx"));
+const UserList = lazy(() => import("./components/Panel/components/UserList.tsx"));
 
 function App() {
-  return (
-      <Routes>
-          <Route path={"/"} element={<Base />}>
-              <Route index element={<Home />}></Route>
-              <Route path={"/userlist"} element={<Home />}></Route>  {/*暂且这么写*/}
-              <Route path={"/error"} element={<Home />}></Route>  {/*暂且这么写*/}
-          </Route>
-          <Route path={"/page"} element={<Page />} />
-      </Routes>
-  )
+    return (
+        <Suspense fallback={<Loading />}>
+            <Routes>
+                <Route path={"/"} element={<Base />}>
+                    <Route index element={<Home />} />
+                    <Route path={"/userlist"} element={<UserList />} />
+                    <Route path={"/error"} element={<Loading />} /> {/* 暂且这么写 */}
+                </Route>
+                <Route path={"/page"} element={<Page />} />
+            </Routes>
+        </Suspense>
+    );
 }
 
-export default App
+export default App;
