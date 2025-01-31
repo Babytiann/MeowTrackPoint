@@ -1,8 +1,6 @@
 //此函数用于生成日期范围的默认日期，例如今天、本周、本月、本年，如果不生成，则会导致当数据库没有当前时间范围的数据的时候直接不展示图表，
 //因为X轴没有日期数据
 
-type DateRange = 'today' | 'week' | 'month' | 'year';
-
 function generateFallbackDates(range: DateRange): string[] {
     const today = new Date();
     switch (range) {

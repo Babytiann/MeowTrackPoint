@@ -1,15 +1,8 @@
 import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
-import processData from "../../../../services/processData.ts";
+import processData from "../../../../services/frontendFunction/processData.ts";
 import { useEffect, useState } from "react";
 
-// 定义返回的数据结构类型
-interface ChartData {
-    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }> ;
-    errorData?: unknown;
-    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }> ;
-    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
-}
 
 function PiePUV() {
     const [chartData, setChartData] = useState<ChartData | null>(null);

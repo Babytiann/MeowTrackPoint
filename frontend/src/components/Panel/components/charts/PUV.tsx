@@ -1,20 +1,11 @@
 import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
-import processData from "../../../../services/processData.ts";
-import processDate from "../../../../services/processDate.ts";
-import generateFallbackDates from "../../../../services/generateFallbackDates.ts";
+import processData from "../../../../services/frontendFunction/processData.ts";
+import processDate from "../../../../services/frontendFunction/processDate.ts";
+import generateFallbackDates from "../../../../services/frontendFunction/generateFallbackDates.ts";
+
 import { useEffect, useState } from "react";
 import { Select } from 'antd';
-
-// 定义返回的数据结构类型
-interface ChartData {
-    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }>;
-    errorData?: unknown;
-    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }>;
-    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }>;
-}
-
-type DateRange = 'today' | 'week' | 'month' | 'year';
 
 function PUV() {
     const [chartData, setChartData] = useState<ChartData | null>(null);
@@ -78,7 +69,7 @@ function PUV() {
             <div className="filters absolute right-[20px] z-10">
                 <Select
                     value={dateRange}
-                    onChange={(e) => setDateRange(e as DateRange)}
+                    onChange={(e: DateRange) => setDateRange(e)}
                     options={[
                         { label: '当天', value: 'today' },
                         { label: '本周', value: 'week' },

@@ -2,12 +2,6 @@ import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
 import { useEffect, useState } from "react";
 
-// 定义返回的数据结构类型
-interface ChartData {
-    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
-    errorData?: unknown;
-    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }> ;
-}
 
 function RoseChart() {
     const [chartData, setChartData] = useState<ChartData | null>(null);
