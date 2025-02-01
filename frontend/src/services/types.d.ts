@@ -13,3 +13,7 @@ declare interface SeriesData {
 
 declare type DateRange = 'today' | 'week' | 'month' | 'year';
 
+declare interface CardProps {
+    readonly event: string;
+    buttonClick(event: string): void; // 修正了参数类型
+}

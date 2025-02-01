@@ -7,6 +7,7 @@ const Page = lazy(() => import('./components/testPage/Main.tsx'));
 const Base = lazy(() => import("./components/Panel/Base.tsx"));
 const Home = lazy(() => import("./components/Panel/components/Home.tsx"));
 const UserList = lazy(() => import("./components/Panel/components/UserList.tsx"));
+const TrackPoint = lazy(() => import("./components/Panel/components/trackpoint/TrackPoint.tsx"));
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path={"/userlist"} element={<UserList />} />
                     <Route path={"/error"} element={<Loading />} /> {/* 暂且这么写 */}
+                    <Route path={"/track"} element={<TrackPoint />} />
                 </Route>
                 <Route path={"/page"} element={<Page />} />
             </Routes>
