@@ -3,7 +3,7 @@ import PiePuv from './charts/PiePUV';
 import EventPUV from "./charts/EventPUV.tsx";
 import Referrer from "./charts/Referrer.tsx";
 
-function Home() {
+function Home({ events }: Readonly<HomeProps>) {
     return (
         <div className="flex flex-col gap-10 mt-[5%] h-[1000px]">
             <div className="flex flex-col md:flex-row w-full h-full">
@@ -14,7 +14,7 @@ function Home() {
                 <Puv />
             </div>
             <div className="w-full h-full">
-                <EventPUV />
+                <EventPUV events={events} />
             </div>
         </div>
     )

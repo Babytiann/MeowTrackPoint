@@ -15,5 +15,18 @@ declare type DateRange = 'today' | 'week' | 'month' | 'year';
 
 declare interface CardProps {
     readonly event: string;
-    buttonClick(event: string): void; // 修正了参数类型
+    buttonClick(event: string): void;
+}
+
+declare interface TrackPointProps {
+    events: string[];
+    setEvents: React.Dispatch<React.SetStateAction<string[]>>;
+    pointList: string[];
+    setPointList: React.Dispatch<React.SetStateAction<string[]>>;
+    nowEvent: string | null;
+    setNowEvent: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+declare interface HomeProps {
+    readonly events: string[];
 }

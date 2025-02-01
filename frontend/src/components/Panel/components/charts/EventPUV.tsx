@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import { Select } from 'antd';
 
 
-function EventPUV() {
+function EventPUV({ events }: Readonly<HomeProps>) {
     const [chartData, setChartData] = useState<ChartData | null>(null);
     const [dateRange, setDateRange] = useState<DateRange>('week');  // 默认选中“本周”
     const [eventType, setEventType] = useState<string>('total');
@@ -37,7 +37,9 @@ function EventPUV() {
         optionList.current = Array.from(
             new Set(
                 chartData.demoData
-                    ?.filter(item => item.event !== 'puv') // 过滤掉 event 为 'puv' 的项
+                    ?.filter(item => {
+                       return  (item.event !== 'puv') && events.includes(item.event)
+                    }) // 过滤掉 event 为 'puv' 且存在于 events 中的项
                     .map(item => item.event)
             )
         ).map(event => ({
@@ -72,16 +74,16 @@ function EventPUV() {
                     }
                 );
             });
-        } else {
+        } else if (events.includes(eventType)) {
             // 如果选择了某一特定事件类型
-            const { pvData, uvData } = processData(filteredData, eventType);
+            const {pvData, uvData} = processData(filteredData, eventType);
 
-             const pvValues = allDates.map(date => pvData[date] || 0);
-             const uvValues = allDates.map(date => uvData[date]?.size || 0);
+            const pvValues = allDates.map(date => pvData[date] || 0);
+            const uvValues = allDates.map(date => uvData[date]?.size || 0);
 
             series.push(
-                { name: `${eventType} PV`, type: 'line', data: pvValues },
-                { name: `${eventType} UV`, type: 'line', data: uvValues }
+                {name: `${eventType} PV`, type: 'line', data: pvValues},
+                {name: `${eventType} UV`, type: 'line', data: uvValues}
             );
         }
 
@@ -131,7 +133,7 @@ function EventPUV() {
             chartInstance.current?.dispose();
             chartInstance.current = null;
         };
-    }, [chartData, dateRange, eventType]);
+    }, [chartData, dateRange, eventType, events]);
 
     return (
         <div className="w-full h-full relative">
