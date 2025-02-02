@@ -16,11 +16,15 @@ function App() {
     const [pointList, setPointList] = useState<string[]>([ "click", "testEvent", "sdkTest"]);
 
     useEffect(() => {
-        const events = localStorage.getItem("events");
-        if (events) {
-            setEvents(JSON.parse(events));
+        const storedEvents = localStorage.getItem("events");
+        if (storedEvents) {
+            const parsedEvents = JSON.parse(storedEvents);
+            setEvents(parsedEvents);
+
+            // 从 pointList 中删除已存储的 events 项
+            setPointList((prevPointList) => prevPointList.filter(item => !parsedEvents.includes(item)));
         }
-    }, [])
+    }, []);
 
     return (
         <Suspense fallback={<Loading />}>
