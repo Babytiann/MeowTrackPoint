@@ -6,7 +6,7 @@ import Loading from "./components/Panel/Loading";
 const Page = lazy(() => import('./components/testPage/Main.tsx'));
 const Base = lazy(() => import("./components/Panel/Base.tsx"));
 const Home = lazy(() => import("./components/Panel/components/Home.tsx"));
-const UserList = lazy(() => import("./components/Panel/components/UserList.tsx"));
+const UserList = lazy(() => import("./components/Panel/components/User/UserList.tsx"));
 const TrackPoint = lazy(() => import("./components/Panel/components/trackpoint/TrackPoint.tsx"));
 
 function App() {

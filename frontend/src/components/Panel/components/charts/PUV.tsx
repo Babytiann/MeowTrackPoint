@@ -1,6 +1,6 @@
 import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
-import processData from "../../../../services/frontendFunction/processData.ts";
+import processPuvData from "../../../../services/frontendFunction/processPuvData.ts";
 import processDate from "../../../../services/frontendFunction/processDate.ts";
 import generateFallbackDates from "../../../../services/frontendFunction/generateFallbackDates.ts";
 
@@ -29,7 +29,7 @@ function PUV() {
             : generateFallbackDates(dateRange);
 
         // 处理数据（兼容空数组）
-        const { pvData, uvData } = processData(filteredData, "puv");
+        const { pvData, uvData } = processPuvData(filteredData, "puv");
 
         // 确保每个日期都有值
         const pvValues = safeDates.map(date => pvData[date] || 0);

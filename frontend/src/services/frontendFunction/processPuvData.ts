@@ -4,7 +4,7 @@ interface DemoData {
     event: string;
 }
 
-function processData(demoData: DemoData[], type: string = "") {
+function processPuvData(demoData: DemoData[], type: string = "") {
     const pvData: { [key: string]: number } = {};
     const uvData: { [key: string]: Set<string> } = {};
 
@@ -29,4 +29,4 @@ function processData(demoData: DemoData[], type: string = "") {
     return { pvData, uvData };
 }
 
-export default processData;
+export default processPuvData;

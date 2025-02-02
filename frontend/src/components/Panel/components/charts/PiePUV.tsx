@@ -1,6 +1,6 @@
 import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
-import processData from "../../../../services/frontendFunction/processData.ts";
+import processPuvData from "../../../../services/frontendFunction/processPuvData.ts";
 import { useEffect, useState } from "react";
 
 
@@ -27,7 +27,7 @@ function PiePUV() {
         if (demoData) {
 
             // 统计 PV 和 UV
-            const { pvData, uvData } = processData(demoData, "puv");
+            const { pvData, uvData } = processPuvData(demoData, "puv");
 
             // 计算 PV 和 UV 总数
             const totalPv = Object.values(pvData).reduce((acc, pv) => acc + pv, 0);

@@ -1,6 +1,6 @@
 import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
-import processData from "../../../../services/frontendFunction/processData.ts";
+import processPuvData from "../../../../services/frontendFunction/processPuvData.ts";
 import processDate from "../../../../services/frontendFunction/processDate.ts";
 import generateFallbackDates from "../../../../services/frontendFunction/generateFallbackDates.ts";
 
@@ -60,7 +60,7 @@ function EventPUV({ events }: Readonly<HomeProps>) {
             // 处理所有事件
             optionList.current.forEach((option) => {
                 if (option.value === 'total') return;
-                const { pvData, uvData } = processData(filteredData, option.value);
+                const { pvData, uvData } = processPuvData(filteredData, option.value);
 
                 series.push(
                     {
@@ -76,7 +76,7 @@ function EventPUV({ events }: Readonly<HomeProps>) {
             });
         } else if (events.includes(eventType)) {
             // 如果选择了某一特定事件类型
-            const {pvData, uvData} = processData(filteredData, eventType);
+            const {pvData, uvData} = processPuvData(filteredData, eventType);
 
             const pvValues = allDates.map(date => pvData[date] || 0);
             const uvValues = allDates.map(date => uvData[date]?.size || 0);
