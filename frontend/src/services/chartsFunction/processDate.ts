@@ -1,14 +1,5 @@
 import getDateRange from "./getDateRange.ts";
 
-interface ChartData {
-    demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }> ;
-    errorData?: unknown;
-    timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }> ;
-    baseInfoData?: Array<{ uuid: string; create_at: string; browser: string; os: string; referrer: string; }> ;
-}
-
-type DateRange = 'today' | 'week' | 'month' | 'year';
-
 function processDate(chartData: ChartData | null, dateRange: DateRange ){
     // 获取当前时间，作为结束时间
     const currentDate = new Date();

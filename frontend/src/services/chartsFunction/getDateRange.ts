@@ -1,5 +1,3 @@
-type DateRange = 'today' | 'week' | 'month' | 'year';
-
 function getDateRange(range: DateRange){
     const currentDate = new Date();
     const startDate = new Date(currentDate);

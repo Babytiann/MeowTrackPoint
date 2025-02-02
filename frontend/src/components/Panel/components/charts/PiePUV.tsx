@@ -1,6 +1,6 @@
 import * as echarts from 'echarts';
 import fetchData from "../../../../services/fetchData.ts";
-import processPuvData from "../../../../services/frontendFunction/processPuvData.ts";
+import processPuvData from "../../../../services/chartsFunction/processPuvData.ts";
 import { useEffect, useState } from "react";
 
 
