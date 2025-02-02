@@ -1,4 +1,4 @@
-declare interface ChartData {
+declare interface TableData {
     demoData?: Array<{ uuid: string; create_at: string; event: string; event_data: string; page_url: string }>;
     errorData?: unknown;
     timingData?: Array<{ uuid: string; create_at: string; event: string; page_url: string; FP: number; DCL: number; L: number }>;
@@ -29,4 +29,10 @@ declare interface TrackPointProps {
 
 declare interface HomeProps {
     readonly events: string[];
+}
+
+declare interface UserData {
+    uuid: string;
+    browser: string;
+    os: string;
 }

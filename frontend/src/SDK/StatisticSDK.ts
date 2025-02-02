@@ -115,12 +115,15 @@ class StatisticSDK{
 
         const os = parser.getOS().name; // 获取操作系统信息
         const osVersion = parser.getOS().version; // 获取操作系统版本信息
-        const browser = parser.getBrowser().name; // 获取浏览器信息
+        const browser = parser.getBrowser();
+        const browserName = browser.name; // 获取浏览器名称
+        const browserVersion = browser.version; // 获取浏览器版本号
         const referrer = document.referrer;
 
         const fullOS = os && osVersion ? `${os} ${osVersion}` : os;
+        const fullBrowserInfo = `${browserName} ${browserVersion}`; // 完整的浏览器信息
 
-        this.send("/baseInfo", { os: fullOS,browser: browser, referrer: referrer })
+        this.send("/baseInfo", { os: fullOS, browser: fullBrowserInfo, referrer: referrer });
     }
 
 }

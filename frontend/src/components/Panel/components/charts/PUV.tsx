@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { Select } from 'antd';
 
 function PUV() {
-    const [chartData, setChartData] = useState<ChartData | null>(null);
+    const [chartData, setChartData] = useState<TableData | null>(null);
     const [dateRange, setDateRange] = useState<DateRange>('week');  // 默认选中“本周”
 
     useEffect(() => {

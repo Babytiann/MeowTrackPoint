@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 
 function RoseChart() {
-    const [chartData, setChartData] = useState<ChartData | null>(null);
+    const [chartData, setChartData] = useState<TableData | null>(null);
 
     useEffect(() => {
         fetchData().then((res) => {

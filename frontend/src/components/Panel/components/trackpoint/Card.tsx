@@ -27,7 +27,8 @@ function Card({ event, buttonClick }: Readonly<CardProps>) {
         <div className="mt-4 py-4 px-10
                         rounded-xl
                         border-e-gray-200
-                        bg-[#FAFAFA]
+                        bg-cardBg
+                        drop-shadow-md
                         flex
                         justify-between
                         ">

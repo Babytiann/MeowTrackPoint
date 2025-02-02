@@ -9,7 +9,7 @@ import { Select } from 'antd';
 
 
 function EventPUV({ events }: Readonly<HomeProps>) {
-    const [chartData, setChartData] = useState<ChartData | null>(null);
+    const [chartData, setChartData] = useState<TableData | null>(null);
     const [dateRange, setDateRange] = useState<DateRange>('week');  // 默认选中“本周”
     const [eventType, setEventType] = useState<string>('total');
     const optionList = useRef<{ label: string; value: string }[]>([]);

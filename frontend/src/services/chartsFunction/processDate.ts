@@ -1,6 +1,6 @@
 import getDateRange from "./getDateRange.ts";
 
-function processDate(chartData: ChartData | null, dateRange: DateRange ){
+function processDate(chartData: TableData | null, dateRange: DateRange ){
     // 获取当前时间，作为结束时间
     const currentDate = new Date();
     currentDate.setSeconds(0, 0);  // 重置秒和毫秒为 0
