@@ -8,11 +8,13 @@ function generateFallbackDates(range: DateRange): string[] {
             return [today.toISOString().split('T')[0]];
         }
         case 'week': {
+            const weekStart = new Date(today);
+            weekStart.setDate(today.getDate() - today.getDay());  // 获取当前周的开始日期（周日）
             return Array.from({ length: 7 }, (_, i) => {
-                const d = new Date(today);
-                d.setDate(d.getDate() - i);
+                const d = new Date(weekStart);
+                d.setDate(weekStart.getDate() + i+1);  // 向后推算两天，因为周日的getDay()是0
                 return d.toISOString().split('T')[0];
-            }).reverse();
+            });
         }
         case 'month': {
             const year = today.getFullYear();

@@ -6,8 +6,8 @@ function getDateRange(range: DateRange){
         case 'today':
             startDate.setHours(0, 0, 0, 0);  // 当天从00:00开始
             break;
-        case 'week':
-        { const dayOfWeek = currentDate.getDay();
+        case 'week': {
+            const dayOfWeek = currentDate.getDay();
             const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;  // 处理周日作为一周开始的情况
             startDate.setDate(currentDate.getDate() + diffToMonday);  // 一周的开始日期（周一）
             startDate.setHours(0, 0, 0, 0);

@@ -51,7 +51,29 @@ function UserList() {
 
     return (
         <div>
-            {userCards}
+            <div>
+                <div className="first:mt-5
+                        flex justify-between
+
+                        rounded-xl
+                        border-e-gray-200
+                        ">
+                    <div className="w-[500px]">
+                        用户ID :
+                    </div>
+                    <div className="w-[100px]">
+                        浏览器 :
+                    </div>
+                    <div className="w-[100px] mr-20">
+                        操作系统 :
+                    </div>
+                </div>
+            </div>
+            <hr className="mt-4 border-gray-400" />
+            <div className="mt-4">
+                {userCards}
+            </div>
+
         </div>
     );
 }
