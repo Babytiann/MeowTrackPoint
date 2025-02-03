@@ -6,13 +6,22 @@ function processDate(chartData: TableData["demoData"] | TableData["timingData"] 
     currentDate.setSeconds(0, 0);  // 重置秒和毫秒为 0
 
     // 确保 demoData 是数组类型
-    const demoData = chartData as Array<{ create_at: string; event: string; uuid: string; page_url: string }> ?? [];
+    const demoData = chartData as Array<{
+        L: number;
+        DCL: number;
+        FP: number;
+        create_at: string;
+        event: string;
+        uuid: string;
+        page_url: string
+    }> ?? [];
 
     // 计算选择的日期范围的开始日期
     const startDate = getDateRange(dateRange);
 
     const filteredData = demoData.filter(item => {
         const itemDate = new Date(item.create_at);
+        console.log(item.create_at)
         return itemDate >= startDate && itemDate <= currentDate;
     });
 
