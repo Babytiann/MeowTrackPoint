@@ -28,7 +28,7 @@ function EventPUV({ events }: Readonly<HomeProps>) {
         if (!chartElement || !chartData) return;
 
         // 获取日期范围（即使没有数据）
-        const { filteredData = [], allDates = [] } = processDate(chartData, dateRange) || {};
+        const { filteredData = [], allDates = [] } = processDate(chartData?.demoData, dateRange) || {};
 
         // 强制生成日期范围（兼容空数据）
         const safeDates = allDates.length > 0 ? allDates : generateFallbackDates(dateRange);
@@ -95,7 +95,10 @@ function EventPUV({ events }: Readonly<HomeProps>) {
         const option = {
             title: {
                 text: '事件PV & UV',
-                left: 'center'
+                left: 'center',
+                textStyle: {
+                    color: '#333',
+                },
             },
             tooltip: {
                 trigger: "axis",

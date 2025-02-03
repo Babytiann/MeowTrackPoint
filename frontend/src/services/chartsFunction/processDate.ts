@@ -1,12 +1,12 @@
 import getDateRange from "./getDateRange.ts";
 
-function processDate(chartData: TableData | null, dateRange: DateRange ){
+function processDate(chartData: TableData["demoData"] | TableData["timingData"] | TableData["baseInfoData"] | TableData["errorData"] | null, dateRange: DateRange ){
     // 获取当前时间，作为结束时间
     const currentDate = new Date();
     currentDate.setSeconds(0, 0);  // 重置秒和毫秒为 0
 
     // 确保 demoData 是数组类型
-    const demoData = chartData?.demoData as Array<{ create_at: string; event: string; uuid: string; page_url: string }> ?? [];
+    const demoData = chartData as Array<{ create_at: string; event: string; uuid: string; page_url: string }> ?? [];
 
     // 计算选择的日期范围的开始日期
     const startDate = getDateRange(dateRange);

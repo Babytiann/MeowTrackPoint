@@ -21,7 +21,7 @@ function PUV() {
         const chartElement = document.querySelector('.chart') as HTMLDivElement;
 
         // 获取日期范围和过滤后的数据（即使为空数组）
-        const { filteredData = [], allDates = [] } = processDate(chartData, dateRange) || {};
+        const { filteredData = [], allDates = [] } = processDate(chartData?.demoData, dateRange) || {};
 
         // 如果allDates为空（发生在完全没有数据时），手动生成日期范围
         const safeDates = allDates.length > 0
@@ -38,7 +38,13 @@ function PUV() {
         // 渲染图表
         const chart = echarts.init(chartElement, 'chalk');
         const option = {
-            title: { text: '首页PV & UV ', left: 'center' },
+            title: {
+                text: '首页PV & UV ',
+                left: 'center',
+                textStyle: {
+                    color: '#333',
+                },
+            },
             tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
             legend: { data: ['PV', 'UV'], left: 'left', orient: "vertical", itemGap: 20 },
             xAxis: { type: 'category', data: safeDates },
