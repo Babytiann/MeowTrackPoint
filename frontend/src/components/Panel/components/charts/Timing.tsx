@@ -34,7 +34,7 @@ function Timing({ events }: Readonly<HomeProps>) {
         const lData: Array<{ date: string, time: Array<number> }> = [];
 
         filteredData.forEach((item) => {
-            const date = item.create_at.slice(0, 13);  // 取出年月日时
+            const date = item.create_at.slice(0, 10);  // 取出年月日（YYYY-MM-DD）
             const fp = item.FP ?? 0;
             const dcl = item.DCL ?? 0;
             const l = item.L ?? 0;
