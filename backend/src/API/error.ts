@@ -21,7 +21,7 @@ async function initDatabase() {
             'stack TEXT, ' +
             'type VARCHAR(50), ' +
             'page_url VARCHAR(255), ' +
-            'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
+            'create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
 
         console.log("Table 'error' is ready.");
     } catch (error) {

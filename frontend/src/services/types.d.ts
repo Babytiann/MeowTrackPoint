@@ -36,3 +36,12 @@ declare interface UserData {
     browser: string;
     os: string;
 }
+
+declare interface ErrorData {
+    uuid: string;
+    message: string;
+    stack: string;
+    type: string;
+    page_url: string;
+    create_at: string;
+}

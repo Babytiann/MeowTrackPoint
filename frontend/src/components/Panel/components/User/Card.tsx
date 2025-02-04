@@ -9,13 +9,13 @@ function Card({ item }: Readonly<{ item: UserData }>) {
                         rounded-xl
                         border-e-gray-200
                         ">
-            <div className="w-[500px]">
+            <div className="md:w-[400px] w-[200px]">
                 {item.uuid}
             </div>
             <div className="w-[100px]">
                 {item.browser}
             </div>
-            <div className="w-[100px] mr-20">
+            <div className="w-[100px] md:mr-20 mr-5">
                 {item.os}
             </div>
         </div>
