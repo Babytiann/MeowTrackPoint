@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router";
 import {Suspense, lazy, useState, useEffect} from "react";
 import Loading from "./components/Panel/Loading";
+import { ConfigProvider } from 'antd';
 
 // 使用 React.lazy 动态加载组件
 const Page = lazy(() => import('./components/testPage/Main.tsx'));
@@ -28,17 +29,30 @@ function App() {
     }, []);
 
     return (
-        <Suspense fallback={<Loading />}>
-            <Routes>
-                <Route path={"/"} element={<Base />}>
-                    <Route index element={<Home events={events} />} />
-                    <Route path={"/userlist"} element={<UserList />} />
-                    <Route path={"/error"} element={<ErrorList />} />
-                    <Route path={"/track"} element={<TrackPoint events={events} nowEvent={nowEvent} setNowEvent={setNowEvent} setEvents={setEvents} pointList={pointList} setPointList={setPointList}/>} />
-                </Route>
-                <Route path={"/page"} element={<Page />} />
-            </Routes>
-        </Suspense>
+        <>
+            <ConfigProvider
+                theme={{
+                    components: {
+                        Switch: {
+                            colorPrimary: '#EFF0F3',
+                            algorithm: true, // 启用算法
+                        },
+                    },
+                }}
+            >
+            </ConfigProvider>
+            <Suspense fallback={<Loading />}>
+                <Routes>
+                    <Route path={"/"} element={<Base />}>
+                        <Route index element={<Home events={events} />} />
+                        <Route path={"/userlist"} element={<UserList />} />
+                        <Route path={"/error"} element={<ErrorList />} />
+                        <Route path={"/track"} element={<TrackPoint events={events} nowEvent={nowEvent} setNowEvent={setNowEvent} setEvents={setEvents} pointList={pointList} setPointList={setPointList}/>} />
+                    </Route>
+                    <Route path={"/page"} element={<Page />} />
+                </Routes>
+            </Suspense>
+        </>
     );
 }
 

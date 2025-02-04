@@ -4,6 +4,7 @@ function Card({ item }: Readonly<{ item: UserData }>) {
                         flex justify-between
 
                         bg-cardBg
+                        dark:bg-cardDarkBg
                         drop-shadow-md
 
                         rounded-xl

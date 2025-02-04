@@ -21,7 +21,7 @@ const BaseArea = () =>{
           <div className="flex  dark:bg-darkBg dark:text-white">
              <Sider brightMode={brightMode} ></Sider>
              <div className="grow flex flex-col">
-                 <Header></Header>
+                 <Header toggleMode={toggleMode}></Header>
                  <Outlet />
              </div>
           </div>

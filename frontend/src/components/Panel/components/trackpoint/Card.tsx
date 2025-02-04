@@ -28,6 +28,7 @@ function Card({ event, buttonClick }: Readonly<CardProps>) {
                         rounded-xl
                         border-e-gray-200
                         bg-cardBg
+                        dark:bg-cardDarkBg
                         drop-shadow-md
                         flex
                         justify-between

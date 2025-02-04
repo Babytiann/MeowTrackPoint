@@ -45,3 +45,7 @@ declare interface ErrorData {
     page_url: string;
     create_at: string;
 }
+
+declare interface HeaderProps {
+    toggleMode(): void;
+}

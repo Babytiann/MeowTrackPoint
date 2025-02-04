@@ -21,7 +21,6 @@ function processDate(chartData: TableData["demoData"] | TableData["timingData"] 
 
     const filteredData = demoData.filter(item => {
         const itemDate = new Date(item.create_at);
-        console.log(item.create_at)
         return itemDate >= startDate && itemDate <= currentDate;
     });
 

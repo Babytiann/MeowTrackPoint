@@ -19,6 +19,7 @@
 }
 
 @theme {
-  --color-darkBg: #3B3B3A;
+  --color-darkBg: #1E1D1F;
   --color-cardBg: #FAFAFA;
+  --color-cardDarkBg: #2F2E31;
 }
