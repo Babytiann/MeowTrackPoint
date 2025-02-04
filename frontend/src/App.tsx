@@ -8,6 +8,7 @@ const Base = lazy(() => import("./components/Panel/Base.tsx"));
 const Home = lazy(() => import("./components/Panel/components/Home.tsx"));
 const UserList = lazy(() => import("./components/Panel/components/User/UserList.tsx"));
 const TrackPoint = lazy(() => import("./components/Panel/components/trackpoint/TrackPoint.tsx"));
+const ErrorList = lazy(() => import("./components/Panel/components/Error/Error.tsx"));
 
 function App() {
 
@@ -32,7 +33,7 @@ function App() {
                 <Route path={"/"} element={<Base />}>
                     <Route index element={<Home events={events} />} />
                     <Route path={"/userlist"} element={<UserList />} />
-                    <Route path={"/error"} element={<Loading />} /> {/* 暂且这么写 */}
+                    <Route path={"/error"} element={<ErrorList />} />
                     <Route path={"/track"} element={<TrackPoint events={events} nowEvent={nowEvent} setNowEvent={setNowEvent} setEvents={setEvents} pointList={pointList} setPointList={setPointList}/>} />
                 </Route>
                 <Route path={"/page"} element={<Page />} />

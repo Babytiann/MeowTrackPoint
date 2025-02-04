@@ -36,7 +36,6 @@ function UserList() {
                     return a.uuid.localeCompare(b.uuid); // 根据 uuid 进行排序
                 });
         }
-        console.log(user.current);
 
         setUserCards(user.current.map((item) => {
             return (
@@ -58,13 +57,13 @@ function UserList() {
                         rounded-xl
                         border-e-gray-200
                         ">
-                    <div className="w-[500px]">
+                    <div className="md:w-[400px] w-[200px]">
                         用户ID :
                     </div>
                     <div className="w-[100px]">
                         浏览器 :
                     </div>
-                    <div className="w-[100px] mr-20">
+                    <div className="w-[100px] md:mr-20 mr-5">
                         操作系统 :
                     </div>
                 </div>
