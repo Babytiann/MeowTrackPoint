@@ -1,36 +1,34 @@
-import  axios from "axios";
+import axios from "axios";
 import { UAParser } from 'ua-parser-js';
 
-declare type query ={
+declare type query = {
     uuid?: string | null;
     event?: string;
     event_data?: string | null;
     time?: PerformanceEntry[];
     message?: string;
-    stack?: string;
+    stack?: string | null;
     type?: string;
     page_url?: string;
-    FP?: number,
-    DCL?: number,
-    L?: number,
-    os?: string,
-    browser?: string,
-    referrer?: string,
+    FP?: number;
+    DCL?: number;
+    L?: number;
+    os?: string;
+    browser?: string;
+    referrer?: string;
 }
-/*路由： /timing 接收时间
-        /error  接收错误信息
-        /demo  接收用户行为数据
-*/
-class StatisticSDK{
+
+class StatisticSDK {
     uuid: string | null;
 
-    constructor(UUID: string|null) {
+    constructor(UUID: string | null) {
         this.uuid = UUID;
         this.initError();
         this.PUV();
         this.sendBaseInfo();
         this.initPerformance();
-    };
+        this.monitorWhiteScreen(); // 初始化白屏监控
+    }
 
     send(Url: string, query:query = {}){
         query.uuid = this.uuid;                   //添加事件名称
@@ -97,15 +95,15 @@ class StatisticSDK{
             ...etraInfo // 展开 etraInfo 对象
         };
 
-        this.send(errorURL, {...transform})
+        this.send(errorURL, { ...transform })
     }
 
-    initError(){
-        window.addEventListener('error', event=>{
-            this.error(event.error, { type: 'errorEvent'});
+    initError() {
+        window.addEventListener('error', event => {
+            this.error(event.error, { type: 'errorEvent' });
         })
-        window.addEventListener('unhandledrejection', event=>{
-            this.error(new Error(event.reason), { type: 'unhandledrejection'})  //query中添加type属性
+        window.addEventListener('unhandledrejection', event => {
+            this.error(new Error(event.reason), { type: 'unhandledrejection' })  // query中添加type属性
         })
     }
 
@@ -126,6 +124,36 @@ class StatisticSDK{
         this.send("/baseInfo", { os: fullOS, browser: fullBrowserInfo, referrer: referrer });
     }
 
+    // 白屏监控
+    monitorWhiteScreen() {
+        const timeoutDuration: number = 5000; // 5秒内没有内容则认为是白屏
+        const checkInterval: number = 1000; // 每秒检查一次
+
+        const checkContent = (): boolean => {
+            return document.body.innerHTML.trim().length > 0;
+        }
+
+        // 定期检查是否发生白屏
+        const timer = setInterval(() => {
+            if (!checkContent()) {
+                console.warn("白屏检测: 页面在5秒内没有内容渲染");
+                this.send('/error', {
+                    type: "whiteScreen",
+                    message: "Page did not load content within 5 seconds",
+                    stack: null
+                });
+                clearInterval(timer); // 停止检查
+            } else {
+                console.log("页面已正常渲染");
+                clearInterval(timer); // 停止检查
+            }
+        }, checkInterval);
+
+        // 设置5秒超时后强制停止检测
+        setTimeout(() => {
+            clearInterval(timer);
+        }, timeoutDuration);
+    }
 }
 
 export default StatisticSDK;
