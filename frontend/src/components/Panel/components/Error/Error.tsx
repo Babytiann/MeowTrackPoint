@@ -89,7 +89,7 @@ function ErrorList() {
             setErrorCards(uniqueFilteredData.map((item) => {
                 return (
                     <Card
-                        key={item.uuid || key.current++}  // 使用 uuid 或递增的 key
+                        key={key.current++}  // 使用 uuid 或递增的 key
                         item={item}
                     />
                 );
@@ -101,7 +101,7 @@ function ErrorList() {
         <div>
             <div>
                 <div className="first:mt-5 flex justify-between rounded-xl border-e-gray-200">
-                    <div className="md:w-[400px] w-[200px]">
+                    <div className="md:w-[200px] w-[100px]">
                         用户ID :
                     </div>
                     <div className="w-[100px]">
