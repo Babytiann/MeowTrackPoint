@@ -7,7 +7,7 @@ import * as React from "react";
 function ErrorList() {
     const [ErrorData, setErrorData] = useState<ErrorData[] | null>(null);
     const [errorCards, setErrorCards] = useState<React.ReactNode[]>([]);
-    const [ErrorType, setErrorType] = useState<string>("total");
+    const [ErrorType, setErrorType] = useState<string>();
     const [nowId, setNowId] = useState<string | null>(null);
 
     const optionList = useRef<{ label: string; value: string }[]>([]);
@@ -69,8 +69,6 @@ function ErrorList() {
                 label: event,
                 value: event
             }));
-
-            optionList.current.push({ label: 'total', value: 'total' });
         }
     }, [ErrorData]);
 
@@ -140,6 +138,7 @@ function ErrorList() {
                             value={ErrorType}
                             onChange={(e: string) => setErrorType(e)}  // 确保 onChange 接受的是 string 类型
                             options={optionList.current}
+                            placeholder={"Search to Select"}
                         />
                     </div>
                     <div className="w-[100px] mr-5">
@@ -151,7 +150,7 @@ function ErrorList() {
                     <div className="w-[100px] mr-5">
                         <Button color="danger" variant="outlined" onClick={() => {
                             setNowId(null);
-                            setErrorType("total");
+                            setErrorType("");
                         }}>清空</Button>
                     </div>
                 </div>
