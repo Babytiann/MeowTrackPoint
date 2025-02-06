@@ -59,6 +59,7 @@ async function insertData(data: unknown) {
 
         console.log(result);   //返回语句执行结果,通常会有affectedRows等
         console.log(fields);   //因为是插入语句所以为空也就是undefined
+        console.log("Insert in table 'baseInfo'\n");
     } catch (error){
         console.error("Error inserting data in table 'baseInfo':", error);
     }finally {

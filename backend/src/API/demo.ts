@@ -59,6 +59,7 @@ async function insertData(data: unknown) {
 
         console.log(result);
         console.log(fields);
+        console.log("Insert in table 'demo'\n");
     } catch (error){
         console.error("Error inserting data in table 'demo':", error);
     }finally {
