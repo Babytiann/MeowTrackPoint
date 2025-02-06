@@ -1,23 +1,6 @@
 import axios from "axios";
 import { UAParser } from 'ua-parser-js';
 
-declare type query = {
-    uuid?: string | null;
-    event?: string;
-    event_data?: string | null;
-    time?: PerformanceEntry[];
-    message?: string;
-    stack?: string | null;
-    type?: string;
-    page_url?: string;
-    FP?: number;
-    DCL?: number;
-    L?: number;
-    os?: string;
-    browser?: string;
-    referrer?: string;
-}
-
 class StatisticSDK {
     uuid: string | null;
 
