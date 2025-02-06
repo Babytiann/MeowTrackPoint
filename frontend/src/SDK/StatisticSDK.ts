@@ -5,7 +5,6 @@ interface Query {
     [key: string]: query | null | string | number | PerformanceEntry[];
 }
 
-
 class StatisticSDK {
     uuid: string | null;
     messages: Query[] = [];
@@ -26,11 +25,7 @@ class StatisticSDK {
 
         this.messages.push(query);
 
-        // 如果队列中消息超过 50 条，立即发送并清空队列
-        if (this.messages.length > 50) {
-            this.sendMessages(Url);
-        } else if (this.messages.length > 0 && !this.sendTimer) {
-            // 如果队列中有内容且计时器未启动，则启动计时器，每 5 秒发送一次
+        if (this.messages.length > 0 && !this.sendTimer) {
             this.sendTimer = setInterval(() => {
                 if (this.messages.length > 0) {
                     this.sendMessages(Url);
@@ -40,13 +35,13 @@ class StatisticSDK {
     }
 
     sendMessages(Url: string) {
-        // 发送队列中的消息
-        this.messages.forEach((item) => {
+        // 取出队列中的前五条消息
+        const messagesToSend = this.messages.splice(0, 5);
+
+        //取出来之后发送
+        messagesToSend.forEach((item) => {
             this.send(Url, item);
         });
-
-        // 发送完消息后清空队列
-        this.messages = [];
 
         // 如果队列为空，清除计时器
         if (this.messages.length === 0 && this.sendTimer) {
@@ -55,9 +50,9 @@ class StatisticSDK {
         }
     }
 
-    send(Url: string, query:query = {}){
-        query.uuid = this.uuid;                   //添加事件名称
-        query.page_url = window.location.href;      // 获取当前页面 URL
+    send(Url: string, query: query = {}) {
+        query.uuid = this.uuid;                   // 添加事件名称
+        query.page_url = window.location.href;    // 获取当前页面 URL
 
         axios({
             method: 'post',
@@ -69,20 +64,20 @@ class StatisticSDK {
             }
         })
             .then(response => {
-                console.log("Send data successfully:",response.data);
+                console.log("Send data successfully:", response.data);
             })
             .catch(err => {
                 console.error("SDK中send函数请求出错啦！！！", err);
-            })
+            });
     }
 
-    //事件监控，PV和UV一起监控，放在一张表格中
-    PUV(){
-        this.send('/demo',{event: "puv", event_data: null})
+    // 事件监控，PV和UV一起监控，放在一张表格中
+    PUV() {
+        this.send('/demo', { event: "puv", event_data: null });
     }
 
-    //性能监控
-    initPerformance(){
+    // 性能监控
+    initPerformance() {
         const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
         const timeParams: query = { FP: 0, DCL: 0, L: 0 };
 
@@ -105,12 +100,11 @@ class StatisticSDK {
             console.log('No navigation entry found.');
         }
 
-        this.send("/timing", timeParams)
-
+        this.send("/timing", timeParams);
     };
 
-    //错误处理
-    error(err: Error, etraInfo:Record<string, unknown> = {}) {
+    // 错误处理
+    error(err: Error, etraInfo: Record<string, unknown> = {}) {
         const errorURL = '/error';
         const { message, stack } = err;
 
@@ -120,16 +114,16 @@ class StatisticSDK {
             ...etraInfo // 展开 etraInfo 对象
         };
 
-        this.send(errorURL, { ...transform })
+        this.send(errorURL, { ...transform });
     }
 
     initError() {
         window.addEventListener('error', event => {
             this.error(event.error, { type: 'errorEvent' });
-        })
+        });
         window.addEventListener('unhandledrejection', event => {
-            this.error(new Error(event.reason), { type: 'unhandledrejection' })  // query中添加type属性
-        })
+            this.error(new Error(event.reason), { type: 'unhandledrejection' });  // query中添加type属性
+        });
     }
 
     sendBaseInfo() {
@@ -156,7 +150,7 @@ class StatisticSDK {
 
         const checkContent = (): boolean => {
             return document.body.innerHTML.trim().length > 0;
-        }
+        };
 
         // 定期检查是否发生白屏
         const timer = setInterval(() => {
