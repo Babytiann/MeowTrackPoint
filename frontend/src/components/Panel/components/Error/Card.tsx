@@ -21,7 +21,7 @@ function Card({ item }: Readonly<{ item: ErrorData }>) {
 
                         whitespace-nowrap
                         overflow-elipsis">
-            <div className="md:w-[200px] w-[200px] truncate">
+            <div className="md:w-[200px] w-[100px] truncate">
                 {item.uuid}
             </div>
             <div className="w-[100px] truncate">
@@ -36,7 +36,7 @@ function Card({ item }: Readonly<{ item: ErrorData }>) {
             <div className="w-[120px] truncate">
                 {item.page_url}
             </div>
-            <div className="w-[100px] md:mr-10 mr-5">
+            <div className={`w-[100px] md:mr-10 mr-5 ${isExpanded ? 'hidden' : ''}`}>
                 {item.create_at}
             </div>
             {/* 展开后显示完整信息 */}

@@ -100,7 +100,7 @@ function ErrorList() {
     return (
         <div>
             <div>
-                <div className="first:mt-5 flex justify-between rounded-xl border-e-gray-200">
+                <div className="first:mt-5 flex justify-between rounded-xl border-e-gray-200 pl-5">
                     <div className="md:w-[200px] w-[100px]">
                         用户ID :
                     </div>
@@ -110,8 +110,8 @@ function ErrorList() {
                     <div className="w-[90px]">
                         堆栈信息 :
                     </div>
-                    <div className="w-[200px] flex justify-around ">
-                        <div>错误类型 :</div>
+                    <div className="w-[200px] flex justify-end gap-2">
+                        <div>类型 :</div>
                         <Select
                             style={{ width: 100 }}
                             value={ErrorType}
@@ -122,8 +122,10 @@ function ErrorList() {
                     <div className="w-[100px] mr-5">
                         页面URL :
                     </div>
-                    <div className="w-[100px] md:mr-10 mr-5">
+                    <div className="w-[100px]">
                         创建时间 :
+                    </div>
+                    <div className="w-[100px] md:mr-10 mr-5">
                     </div>
                 </div>
                 <hr className="mt-4 border-gray-400" />
