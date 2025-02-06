@@ -1,8 +1,15 @@
 import axios from "axios";
 import { UAParser } from 'ua-parser-js';
 
+interface Query {
+    [key: string]: query | null | string | number | PerformanceEntry[];
+}
+
+
 class StatisticSDK {
     uuid: string | null;
+    messages: Query[] = [];
+    sendTimer: NodeJS.Timeout | null = null;
 
     constructor(UUID: string | null) {
         this.uuid = UUID;
@@ -11,6 +18,41 @@ class StatisticSDK {
         this.sendBaseInfo();
         this.initPerformance();
         this.monitorWhiteScreen(); // 初始化白屏监控
+    }
+
+    sendList(Url: string, query: query = {}) {
+        query.uuid = this.uuid;                   // 添加事件名称
+        query.page_url = window.location.href;    // 获取当前页面 URL
+
+        this.messages.push(query);
+
+        // 如果队列中消息超过 50 条，立即发送并清空队列
+        if (this.messages.length > 50) {
+            this.sendMessages(Url);
+        } else if (this.messages.length > 0 && !this.sendTimer) {
+            // 如果队列中有内容且计时器未启动，则启动计时器，每 5 秒发送一次
+            this.sendTimer = setInterval(() => {
+                if (this.messages.length > 0) {
+                    this.sendMessages(Url);
+                }
+            }, 5000);
+        }
+    }
+
+    sendMessages(Url: string) {
+        // 发送队列中的消息
+        this.messages.forEach((item) => {
+            this.send(Url, item);
+        });
+
+        // 发送完消息后清空队列
+        this.messages = [];
+
+        // 如果队列为空，清除计时器
+        if (this.messages.length === 0 && this.sendTimer) {
+            clearInterval(this.sendTimer);
+            this.sendTimer = null;  // 计时器清空
+        }
     }
 
     send(Url: string, query:query = {}){
