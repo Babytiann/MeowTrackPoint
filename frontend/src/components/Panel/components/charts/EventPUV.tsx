@@ -49,7 +49,6 @@ function EventPUV({ events }: Readonly<HomeProps>) {
 
         optionList.current.push({ label: 'total', value: 'total' });
 
-
         // 为选择的事件类型生成数据
         const series: SeriesData[] = [];
 
