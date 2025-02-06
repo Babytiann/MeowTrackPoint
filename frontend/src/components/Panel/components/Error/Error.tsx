@@ -1,17 +1,19 @@
 import fetchData from "../../../../services/fetchData.ts";
 import { useEffect, useState, useRef } from "react";
 import Card from "./Card.tsx";
-import { Select } from "antd";
+import {Button, Select} from "antd";
 import * as React from "react";
 
 function ErrorList() {
     const [ErrorData, setErrorData] = useState<ErrorData[] | null>(null);
     const [errorCards, setErrorCards] = useState<React.ReactNode[]>([]);
     const [ErrorType, setErrorType] = useState<string>("total");
+    const [nowId, setNowId] = useState<string | null>(null);
 
     const optionList = useRef<{ label: string; value: string }[]>([]);
     const user = useRef<ErrorData[]>([]);
     const key = useRef(0);
+    const idList = useRef<string[]>([]);
 
     useEffect(() => {
         fetchData().then((res) => {
@@ -85,24 +87,45 @@ function ErrorList() {
                 new Set(filteredData.map((item) => JSON.stringify(item)))
             ).map((item) => JSON.parse(item));
 
+            user.current.forEach((item) => {
+                if (!idList.current.includes(item.uuid)) {
+                    idList.current.push(item.uuid);
+                }
+            });
+
             // 每次筛选时，清空旧的数据并重新设置
             setErrorCards(uniqueFilteredData.map((item) => {
+                if (nowId === null || item.uuid === nowId) {
                 return (
                     <Card
                         key={key.current++}  // 使用 uuid 或递增的 key
                         item={item}
                     />
-                );
+                );}
             }));
         }
-    }, [ErrorType, ErrorData]);
+    }, [ErrorType, ErrorData, nowId]);
 
     return (
         <div>
             <div>
                 <div className="first:mt-5 flex justify-between rounded-xl border-e-gray-200 pl-5">
-                    <div className="md:w-[200px] w-[100px]">
-                        用户ID :
+                    <div className="md:w-[200px] w-[100px] flex gap-2">
+                        <span>用户ID :</span>
+                        <Select
+                            value={nowId}
+                            onChange={(value) => {
+                                setNowId(value);
+                            }}
+                            showSearch
+                            style={{ width: 120 }}
+                            placeholder="Search to Select"
+                            optionFilterProp="label"
+                            filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                            }
+                            options={idList.current.map(item => ({ label: item, value: item }))}
+                        />
                     </div>
                     <div className="w-[100px]">
                         错误信息 :
@@ -125,7 +148,11 @@ function ErrorList() {
                     <div className="w-[100px]">
                         创建时间 :
                     </div>
-                    <div className="w-[100px] md:mr-10 mr-5">
+                    <div className="w-[100px] mr-5">
+                        <Button color="danger" variant="outlined" onClick={() => {
+                            setNowId(null);
+                            setErrorType("total");
+                        }}>清空</Button>
                     </div>
                 </div>
                 <hr className="mt-4 border-gray-400" />
