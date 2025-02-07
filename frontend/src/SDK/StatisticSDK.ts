@@ -9,6 +9,7 @@ class StatisticSDK {
     uuid: string | null;
     messages: Query[] = [];
     sendTimer: NodeJS.Timeout | null = null;
+    retryTimer: NodeJS.Timeout | null = null;
 
     constructor(UUID: string | null) {
         this.uuid = UUID;
@@ -39,9 +40,7 @@ class StatisticSDK {
         const messagesToSend = this.messages.splice(0, 5);
 
         //取出来之后发送
-        messagesToSend.forEach((item) => {
-            this.send(Url, item);
-        });
+        messagesToSend.forEach((item) => this.send(Url, item));
 
         // 如果队列为空，清除计时器
         if (this.messages.length === 0 && this.sendTimer) {
@@ -68,7 +67,20 @@ class StatisticSDK {
             })
             .catch(err => {
                 console.error("SDK中send函数请求出错啦！！！", err);
+                this.retrySend(Url, query);
             });
+    }
+
+    //请求失败时的重试机制
+    retrySend(Url: string, query: query = {}, retries: number = 3) {
+        if (retries > 0) {
+            this.retryTimer = setTimeout(() => {
+                this.send(Url, query);
+                console.log(`Retrying request, remaining retries: ${retries - 1}`);
+            }, 2000); // 每2秒重试一次
+        } else {
+            console.error("请求重试失败，已达到最大重试次数");
+        }
     }
 
     // 事件监控，PV和UV一起监控，放在一张表格中
