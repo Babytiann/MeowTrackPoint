@@ -11,6 +11,11 @@ class StatisticSDK {
     sendTimer: NodeJS.Timeout | null = null;
     retryTimer: NodeJS.Timeout | null = null;
 
+    lastSendTime: number = 0;
+    throttleDelay: number = 1000;
+
+    lastEvent = "";
+
     constructor(UUID: string | null) {
         this.uuid = UUID;
         this.initError();
@@ -24,7 +29,15 @@ class StatisticSDK {
         query.uuid = this.uuid;                   // 添加事件名称
         query.page_url = window.location.href;    // 获取当前页面 URL
 
+        const currentTime = new Date();
+
+        if (query.event === this.lastEvent && (currentTime.getTime() - this.lastSendTime < this.throttleDelay)) {
+            return; // 防抖，直接返回
+        }
+
         this.messages.push(query);
+        this.lastSendTime = currentTime.getTime();
+        this.lastEvent = query.event as string;
 
         if (this.messages.length > 0 && !this.sendTimer) {
             this.sendTimer = setInterval(() => {
