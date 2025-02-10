@@ -7,7 +7,7 @@ import * as React from "react";
 function ErrorList() {
     const [ErrorData, setErrorData] = useState<ErrorData[] | null>(null);
     const [errorCards, setErrorCards] = useState<React.ReactNode[]>([]);
-    const [ErrorType, setErrorType] = useState<string>();
+    const [ErrorType, setErrorType] = useState<string | null>();
     const [nowId, setNowId] = useState<string | null>(null);
 
     const optionList = useRef<{ label: string; value: string }[]>([]);
@@ -150,7 +150,7 @@ function ErrorList() {
                     <div className="w-[100px] mr-5">
                         <Button color="danger" variant="outlined" onClick={() => {
                             setNowId(null);
-                            setErrorType("");
+                            setErrorType(null);
                         }}>清空</Button>
                     </div>
                 </div>

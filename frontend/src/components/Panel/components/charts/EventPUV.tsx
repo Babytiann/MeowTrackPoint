@@ -7,18 +7,19 @@ import generateFallbackDates from "../../../../services/chartsFunction/generateF
 import { useEffect, useState, useRef } from "react";
 import { Select } from 'antd';
 
-
 function EventPUV({ events }: Readonly<HomeProps>) {
     const [chartData, setChartData] = useState<TableData | null>(null);
     const [dateRange, setDateRange] = useState<DateRange>('week');  // 默认选中“本周”
     const [eventType, setEventType] = useState<string>('total');
+
+    const [chartType, setChartType] = useState<'line'>("line");
     const optionList = useRef<{ label: string; value: string }[]>([]);
     const chartInstance = useRef<echarts.ECharts | null>(null);
 
     useEffect(() => {
         fetchData().then((res) => {
             setChartData(res);
-            console.log(res)
+            console.log(res);
         });
     }, []);
 
@@ -38,8 +39,8 @@ function EventPUV({ events }: Readonly<HomeProps>) {
             new Set(
                 chartData.demoData
                     ?.filter(item => {
-                       return  (item.event !== 'puv') && events.includes(item.event)
-                    }) // 过滤掉 event 为 'puv' 且存在于 events 中的项
+                        return (item.event !== 'puv') && events.includes(item.event);
+                    })
                     .map(item => item.event)
             )
         ).map(event => ({
@@ -64,25 +65,27 @@ function EventPUV({ events }: Readonly<HomeProps>) {
                 series.push(
                     {
                         name: `${option.value} PV`,
-                        type: 'line',
+                        // 根据选择的 chartType 设置图表类型
+                        type: chartType,
                         data: safeDates.map(date => pvData[date] || 0)
-                    }, {
+                    },
+                    {
                         name: `${option.value} UV`,
-                        type: 'line',
+                        type: chartType,
                         data: safeDates.map(date => uvData[date]?.size || 0)
                     }
                 );
             });
         } else if (events.includes(eventType)) {
             // 如果选择了某一特定事件类型
-            const {pvData, uvData} = processPuvData(filteredData, eventType);
+            const { pvData, uvData } = processPuvData(filteredData, eventType);
 
             const pvValues = allDates.map(date => pvData[date] || 0);
             const uvValues = allDates.map(date => uvData[date]?.size || 0);
 
             series.push(
-                {name: `${eventType} PV`, type: 'line', data: pvValues},
-                {name: `${eventType} UV`, type: 'line', data: uvValues}
+                { name: `${eventType} PV`, type: chartType, data: pvValues },
+                { name: `${eventType} UV`, type: chartType, data: uvValues }
             );
         }
 
@@ -135,7 +138,8 @@ function EventPUV({ events }: Readonly<HomeProps>) {
             chartInstance.current?.dispose();
             chartInstance.current = null;
         };
-    }, [chartData, dateRange, eventType, events]);
+        // 将 chartType 添加到依赖数组中，切换图表类型时重新渲染
+    }, [chartData, dateRange, eventType, events, chartType]);
 
     return (
         <div className="w-full h-full relative">
@@ -162,6 +166,18 @@ function EventPUV({ events }: Readonly<HomeProps>) {
                     filterOption={(input, option) =>
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                     }
+                />
+                {/* 图表类型选择器 */}
+                <Select
+                    value={chartType}
+                    style={{ width: 100 }}
+                    onChange={(e) => setChartType(e)}
+                    options={[
+                        { label: '折线图', value: 'line' },
+                        { label: '散点图', value: 'scatter' },
+                    ]}
+                    showSearch
+                    placeholder="Select a chart type"
                 />
             </div>
             <div className="EventChart w-full h-full"></div>
