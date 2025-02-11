@@ -1,9 +1,3 @@
-interface DemoData {
-    uuid: string;
-    create_at: string;
-    event: string;
-}
-
 function processPuvData(demoData: DemoData[], type: string = "") {
     const pvData: { [key: string]: number } = {};
     const uvData: { [key: string]: Set<string> } = {};

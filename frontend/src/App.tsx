@@ -15,7 +15,7 @@ function App() {
 
     const [events, setEvents] = useState<string[]>([]);
     const [nowEvent, setNowEvent] = useState<string | null>(null);
-    const [pointList, setPointList] = useState<string[]>([ "click", "testEvent", "sdkTest"]);
+    const [pointList, setPointList] = useState<string[]>([ "click", "testEvent", "scrollToBottom"]);
 
     useEffect(() => {
         const storedEvents = localStorage.getItem("events");

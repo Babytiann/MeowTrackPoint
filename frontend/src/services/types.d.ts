@@ -66,3 +66,9 @@ declare interface ErrorData {
 declare interface HeaderProps {
     toggleMode(): void;
 }
+
+declare interface DemoData {
+    uuid: string;
+    create_at: string;
+    event: string;
+}

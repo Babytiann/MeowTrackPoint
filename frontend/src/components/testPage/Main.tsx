@@ -15,6 +15,7 @@ function Page() {
 
     const [uuid, setUuid] = useState<string | null>(getUUID());
     const [isUuidReady, setIsUuidReady] = useState(false);
+    const haveBeenBottom = useRef(false);
     const sdkRef = useRef<statisticSDK | null>(null); // 用于存储 SDK 实例
 
     useEffect(() => {
@@ -27,6 +28,27 @@ function Page() {
             setUuid(currentUuid);
             setIsUuidReady(true); // 设置 UUID 后，标记为准备好
         }
+    }, []);
+
+
+    //用户是否滚动到页面底部
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY + window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight
+
+            if (scrollPosition >= documentHeight && !haveBeenBottom.current) {
+                sdkRef.current?.sendList("/demo", {event: "scrollToBottom", event_data: null});
+                haveBeenBottom.current = true;
+                console.log("scroll to bottom")
+            }
+        }
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
     }, []);
 
     useEffect(() => {
