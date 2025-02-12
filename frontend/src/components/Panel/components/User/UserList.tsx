@@ -8,8 +8,10 @@ function UserList() {
     const [userData, setUserData] = useState<UserData[] | null>(null);
     const [userCards, setUserCards] = useState<React.ReactNode[]>();
     const [nowId, setNowId] = useState<string | null>(null);
+    const [nowBrowser, setNowBrowser] = useState<string | null>(null);
     const user = useRef<UserData[]>([]);
     const idList = useRef<string[]>([]);
+    const browserList = useRef<string[]>([]);
 
     useEffect(() => {
         fetchData().then((res) => {
@@ -43,11 +45,14 @@ function UserList() {
             if (!idList.current.includes(item.uuid)) {
                 idList.current.push(item.uuid);
             }
+            if (!browserList.current.includes(item.browser)) {
+                browserList.current.push(item.browser);
+            }
         });
 
         // 更新 userCards，当 nowId 为 null 时展示所有数据，否则只展示当前选中的 ID
         setUserCards(user.current.map((item) => {
-            if (nowId === null || item.uuid === nowId) {
+            if ((nowId === null || item.uuid === nowId) && (nowBrowser === null || item.browser === nowBrowser)) {
                 return (
                     <Card
                         key={item.uuid}
@@ -57,11 +62,15 @@ function UserList() {
             }
         }));
 
-    }, [userData, nowId]);
+    }, [userData, nowId, nowBrowser]);
 
     const handleReset = () => {
         setNowId(null); // 清空筛选条件
     };
+
+    const handleBrowserReset = () => {
+        setNowBrowser(null); // 清空筛选条件
+    }
 
     return (
         <div>
@@ -86,8 +95,23 @@ function UserList() {
                         <Button color="danger" variant="outlined" onClick={handleReset}>清空</Button>
                     </div>
 
-                    <div className="w-[100px]">
-                        浏览器 :
+                    <div className="w-[400px] flex items-center justify-center gap-2">
+                        <span>浏览器 :</span>
+                        <Select
+                            value={nowBrowser}
+                            onChange={(value) => {
+                                setNowBrowser(value);
+                            }}
+                            showSearch
+                            style={{ width: 100 }}
+                            placeholder="Search to Select"
+                            optionFilterProp="label"
+                            filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                            }
+                            options={browserList.current.map(item => ({ label: item, value: item }))}
+                        />
+                        <Button color="danger" variant="outlined" onClick={handleBrowserReset}>清空</Button>
                     </div>
                     <div className="w-[100px] md:mr-20 mr-5">
                         操作系统 :
