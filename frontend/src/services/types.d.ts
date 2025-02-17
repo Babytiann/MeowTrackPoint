@@ -65,6 +65,7 @@ declare interface ErrorData {
 
 declare interface HeaderProps {
     toggleMode(): void;
+    brightMode: boolean;
 }
 
 declare interface DemoData {
