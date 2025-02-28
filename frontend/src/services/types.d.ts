@@ -73,3 +73,12 @@ declare interface DemoData {
     create_at: string;
     event: string;
 }
+
+declare interface ErrorInfo{
+    readonly errorInfo: string;
+}
+
+declare interface ErrorBoundaryState{
+    hasError: boolean;
+    error: Error | null;
+}

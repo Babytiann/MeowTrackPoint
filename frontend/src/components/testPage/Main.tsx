@@ -68,7 +68,7 @@ function Page() {
     const css = "absolute w-[1200px] bottom-1/2 left-1/2 text-center -translate-x-1/2 translate-y-1/2"
     return (
         <>
-            <Error></Error>
+            <Error errorInfo={"test without error"}></Error>
             <div className={"relative h-16"}>
                 <p className={css}>当前 UUID: {uuid}</p>
             </div>
