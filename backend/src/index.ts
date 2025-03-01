@@ -33,7 +33,7 @@ const corsOptions= {
     allowedHeaders: ['Content-Type'],
 };
 
-app.use(cors(corsOptions));// 使用 CORS 中间件
+app.use(cors());// 使用 CORS 中间件
 
 // 全局使用 body-parser 中间件来解析请求体
 app.use(express.json());  // 解析 JSON 请求体
